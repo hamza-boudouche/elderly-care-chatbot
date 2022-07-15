@@ -20,3 +20,4 @@ jobs:
           data_validate: true
           configuration: config.yml
           test_type: all
+          workspace: ${{ github.workspace }}/chatbot
