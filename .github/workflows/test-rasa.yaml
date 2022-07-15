@@ -1,0 +1,22 @@
+name: 'Test rasa stories'
+on: push 
+jobs:
+  my_first_job:
+    name: Rasa train test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./chatbot
+    steps:
+      - uses: actions/checkout@v3
+
+      # Run rasa train and rasa test
+      - name: rasa train test step
+        uses: RasaHQ/rasa-train-test-gha@main
+        with:
+          rasa_version: latest-full
+          rasa_train: true
+          rasa_test: true
+          data_validate: true
+          configuration: config.yml
+          test_type: all
