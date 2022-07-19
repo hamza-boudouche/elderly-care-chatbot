@@ -15,6 +15,9 @@ const useSend = (callbackMessage) => {
   }, []);
 
   useEffect(() => {
+    socket && socket.emit("session_request", {
+      session_id: "some id"
+    });
     socket &&
       socket.on('reply', (message) => {
         console.log(message);
@@ -27,7 +30,7 @@ const useSend = (callbackMessage) => {
     socket.emit("message", {
       sender: user.email,
       message: text,
-      session_id: user.email,
+      session_id: "some id",
     });
   };
 
