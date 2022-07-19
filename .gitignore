@@ -2,7 +2,6 @@ chatbot/models/
 chatbot/.rasa/
 chatbot/results/
 chatbot/.rasa/
-chatbot/.keras
-chatbot/.config
+chatbot/.keras/
+chatbot/.config/
 chatbot/.bash_history
-frontend/node_modules/
