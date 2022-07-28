@@ -5,6 +5,7 @@ import MessagesContext from "../context/MessagesContext";
 import useMessages from "../hooks/useMessages";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FormMessage from './FormMessage';
+// import { ipcRenderer } from "electron";
 
 const Chatbot = () => {
   const myMessages = useContext(MessagesContext);
@@ -40,11 +41,30 @@ const Chatbot = () => {
     [dispatch, dummy]
   );
 
+  const checkReplyMessage = useCallback(
+    ({ text, action }) => {
+      if (action === undefined) {
+        addReplyMessage({ text })
+        console.log("sending message")
+        window.api.send("message.receive", text)
+      } else {
+        switch (action.type) {
+          case "selenium:open":
+            window.api.send("selenium.open", action.payload)
+            break;
+          default:
+            console.log("unsupported action type")
+            break;
+        }
+      }
+    }, [addReplyMessage]
+  );
+
   useEffect(() => {
     dummy.current.scrollIntoView({ behavior: "smooth" });
   }, [state.messages])
 
-  const [sendMessageSocket] = useSend(addReplyMessage);
+  const [sendMessageSocket] = useSend(checkReplyMessage);
 
   const sendMessage = (messageValue) => {
     dispatch({
