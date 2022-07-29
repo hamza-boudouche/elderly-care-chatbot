@@ -7,15 +7,12 @@ jobs:
   my_first_job:
     name: publish swagger doc
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./calendar
     steps:
       - name: Generate Swagger UI
         uses: Legion2/swagger-ui-action@v1
         with:
           output: swagger-ui
-          spec-file: Calendar.yaml
+          spec-file: ./calendar/Calendar.yaml
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
