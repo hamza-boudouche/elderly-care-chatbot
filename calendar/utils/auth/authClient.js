@@ -32,6 +32,7 @@ function authorize(credentials) {
 				const authUrl = oAuth2Client.generateAuthUrl({
 					access_type: 'offline',
 					scope: SCOPES,
+					prompt: 'consent'
 				});
 				console.log('Authorize this app by visiting this url:', authUrl);
 				const rl = readline.createInterface({
@@ -44,7 +45,7 @@ function authorize(credentials) {
 						if (err2) reject('Error retrieving access token', err);
 						oAuth2Client.setCredentials(newToken);
 						// Store the token to disk for later program executions
-						fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+						fs.writeFile(TOKEN_PATH, JSON.stringify(newToken), (err) => {
 							if (err) reject(err);
 							console.log('Token stored to', TOKEN_PATH);
 						});
@@ -59,16 +60,29 @@ function authorize(credentials) {
 	})
 }
 
-/**
- * 
- * @param {google.auth.OAuth2} auth 
- */
-function refreshAccessToken(auth) {
-	return new Promise((resolve, reject) => {
-		oAuth2Client.refreshAccessToken(function (err, tokens) {
-			resolve(tokens.access_token)
-		});
+async function refreshAccessToken() {
+	const credentialsContent = await fs.promises.readFile(path.join(__dirname, "credentials.json"))
+	const oldTokenContent = await fs.promises.readFile(TOKEN_PATH)
+	const credentials = JSON.parse(credentialsContent)
+	const oldToken = JSON.parse(oldTokenContent)
+	const resp = await fetch("https://www.googleapis.com/oauth2/v4/token", {
+		method: "POST",
+		body: JSON.stringify({
+			client_id: credentials.client_id,
+			client_secret: credentials.client_secret,
+			refresh_token: oldToken.refresh_token,
+			grant_type: "refresh_token"
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
 	})
+	const newTokenData = await resp.json()
+	const newToken = {
+		...newTokenData,
+		refresh_token: oldToken.refresh_token
+	}
+	await fs.promises.writeFile(TOKEN_PATH, JSON.stringify(newToken))
 }
 
 module.exports = {

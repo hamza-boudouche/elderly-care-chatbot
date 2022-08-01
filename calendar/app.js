@@ -3,7 +3,8 @@ const app = express()
 const port = process.env.PORT || 3000
 const {
 	credentials,
-	authorize
+	authorize,
+	refreshAccessToken
 } = require("./utils/auth/authClient")
 const {
 	listEvents,
@@ -19,10 +20,15 @@ let oAuth2Client;
 (async () => {
 	console.log("testing")
 	creds = await credentials("./credentials.json")
-	oAuth2Client = await authorize(creds)
-	// oAuth2Client.refreshAccessToken(function (err, tokens) {
-	// 	console.log(tokens)
-	// });
+	while (true) {
+		try {
+			oAuth2Client = await authorize(creds)
+			await listEvents(oAuth2Client)
+			break;
+		} catch (error) {
+			await refreshAccessToken()
+		}
+	}
 })()
 
 app.use(express.json());
