@@ -8,6 +8,7 @@ from utils import actionEventsToday
 from utils import actionEventsRange
 from utils import actionDeleteEvent
 from utils import actionAddEvent
+from utils import actionUpdateEvent
 
 
 class ActionEventsToday(Action):
@@ -52,9 +53,10 @@ class ActionDeleteEvent(Action):
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         events = tracker.get_slot('events')
         humanIndex = tracker.get_slot('human_index')
+        event = tracker.get_slot('event')
         dispatcher.utter_message(
             text=f"deleting the event no {humanIndex}")
-        messages, newEvents = await actionDeleteEvent(humanIndex, events)
+        messages, newEvents = await actionDeleteEvent(humanIndex, events, event)
         for message in messages:
             dispatcher.utter_message(text=message.get("text"))
         return [SlotSet("events", newEvents)]
@@ -86,4 +88,13 @@ class ActionUpdateEvent(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(
+            text=f"modifying the event...")
+        event = tracker.get_slot('event')
+        summary = tracker.get_slot('summary')
+        start = tracker.get_slot('start')
+        end = tracker.get_slot('end')
+        humanIndex = tracker.get_slot('human_index')
+        description = tracker.get_slot('description')
+        messages, updatedEvent = await actionUpdateEvent(event, humanIndex, summary, description, start, end)
         return []
