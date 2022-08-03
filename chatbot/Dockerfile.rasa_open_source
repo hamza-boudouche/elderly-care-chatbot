@@ -1,0 +1,17 @@
+FROM rasa/rasa:latest
+
+EXPOSE 5005
+
+WORKDIR /app
+
+COPY ./ ./
+
+ENTRYPOINT [ "" ]
+
+USER root
+
+RUN rasa train
+
+USER 1001
+
+CMD [ "rasa", "run", "-m", "models", "--enable-api", "--cors", "*", "--debug" ]
