@@ -28,6 +28,9 @@ const Chatbot = () => {
 
   const addReplyMessage = useCallback(
     ({ text }) => {
+      const msg = new SpeechSynthesisUtterance()
+      msg.text = text
+      window.speechSynthesis.speak(msg)
       dispatch({
         type: "addMessage",
         message: {

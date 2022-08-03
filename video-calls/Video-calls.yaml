@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: "Zoom Video calls microservice"
+  description: "Zoom video calls REST API endpoints"
+servers:
+  - url: "http://localhost:8000"
+paths:
+  /meeting:
+    post:
+      summary: create a new zoom meeting
+      tags:
+        - meeting
+      requestBody:
+        description: new meeting data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/newMeetingData"
+      responses:
+        "200":
+          description: meeting created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/meeting"
+
+components:
+  schemas:
+    meeting:
+      type: object
+      properties:
+        url:
+          type: string
+          description: url to join the meeting
+          format: url
+        password:
+          type: string
+          description: password to join the meeting
+          format: password

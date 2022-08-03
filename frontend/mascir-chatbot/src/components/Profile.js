@@ -12,7 +12,9 @@ const Profile = () => {
 			textAlign: "center",
 			height: "100%"
 		}} >
-			<div>
+			<div style={{
+				color: "white"
+			}}>
 				<img
 					src={user.picture}
 					alt="Profile"
@@ -21,8 +23,8 @@ const Profile = () => {
 						margin: "auto"
 					}}
 				/>
-				<h2>{user.name}</h2>
-				<p className="lead text-muted">{user.email}</p>
+				<h2>Welcome {user.name} !</h2>
+				<p className="lead text-muted">email: {user.email}</p>
 			</div>
 		</div>
 	)

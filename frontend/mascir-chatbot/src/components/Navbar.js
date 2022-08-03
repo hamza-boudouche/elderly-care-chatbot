@@ -118,7 +118,7 @@ const Navbar = () => {
                   <ListItemIcon>
                     <ChatIcon fontSize="small" />
                   </ListItemIcon>
-                  <Link to="/chat">Chat</Link>
+                  <Link to="/">Chat</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={() => logoutWithRedirect()}>

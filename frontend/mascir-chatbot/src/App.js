@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import NavBar from './components/Navbar';
 import Chatbot from './components/Chatbot';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -26,8 +26,7 @@ export default function App() {
     <BrowserRouter history={history}>
       <NavBar />
       <Routes>
-        <Route path="/" exact element={<div></div>} />
-        <Route path="/chat" element={<Chatbot />} />
+        <Route path="/" exact element={<Chatbot />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>

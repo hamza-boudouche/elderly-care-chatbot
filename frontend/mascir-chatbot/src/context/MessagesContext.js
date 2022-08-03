@@ -3,11 +3,11 @@ import React from 'react';
 const MessagesContext = React.createContext([
   {
     local: true,
-    text: 'hello world',
+    text: 'Hello',
   },
   {
     local: false,
-    text: 'hello',
+    text: 'Hey, how can I help you ?',
   },
 ]);
 
