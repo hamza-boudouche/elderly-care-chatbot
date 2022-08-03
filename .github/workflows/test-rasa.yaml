@@ -1,7 +1,6 @@
-name: 'Test rasa stories'
-on: 
+name: "Test rasa stories"
+on:
   push:
-  pull_request:
 jobs:
   my_first_job:
     name: Rasa train test

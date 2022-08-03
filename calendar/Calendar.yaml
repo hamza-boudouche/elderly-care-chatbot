@@ -1,0 +1,286 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: "Google calendar microservice"
+  description: "Google calendar REST API endpoints"
+servers:
+  - url: "http://localhost:3000"
+paths:
+  /single/{eventId}:
+    get:
+      summary: get a single event by id
+      tags:
+        - event
+      parameters:
+        - in: path
+          name: eventId
+          schema:
+            type: string
+          required: true
+          description: id of the event in google calendar
+      responses:
+        "200":
+          description: successfully found and returned the wanted event from google calendar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/event"
+  /range:
+    get:
+      summary: get all events happening in the  next 24 hours
+      tags:
+        - event
+      responses:
+        "200":
+          description: successfully found and returned all events in time range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/event"
+  /range/{minDate}/{maxDate}:
+    get:
+      summary: get all events in time range
+      tags:
+        - event
+      parameters:
+        - in: path
+          name: minDate
+          schema:
+            type: string
+            format: date-time
+          required: true
+          description: start of the time range
+        - in: path
+          name: maxDate
+          schema:
+            type: string
+            format: date-time
+          required: true
+          description: end of the time range
+      responses:
+        "200":
+          description: successfully found and returned all events in time range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/event"
+  /:
+    post:
+      summary: create a new google calendar event
+      tags:
+        - event
+      requestBody:
+        description: new event data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/newEventData"
+      responses:
+        "200":
+          description: event added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/event"
+  /{eventId}:
+    put:
+      summary: update an existing google calendar event
+      tags:
+        - event
+      parameters:
+        - in: path
+          name: eventId
+          schema:
+            type: string
+          required: true
+          description: id of the event to update
+      requestBody:
+        description: updated event data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/newEventData"
+      responses:
+        "200":
+          description: event updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/event"
+    delete:
+      summary: delete an existing google calendar event
+      tags:
+        - event
+      parameters:
+        - in: path
+          name: eventId
+          schema:
+            type: string
+          required: true
+          description: id of the event to delete
+      responses:
+        "200":
+          description: event deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: status of the operation
+                    example: event 9jqauu4um9fsmto6hv41h9t9bg deleted
+components:
+  schemas:
+    event:
+      type: object
+      properties:
+        kind:
+          type: string
+          description: kind of the requested object
+          example: calendar#event
+        etag:
+          type: string
+          description: irrelevant
+          example: "3318202949870000"
+        id:
+          type: string
+          description: id of the requested event
+          example: 2ck8faconarkpmaheblrl7arot
+        status:
+          type: string
+          description: irrelevant
+          example: confirmed
+        htmlLink:
+          type: string
+          description: url of the requested object
+        created:
+          type: string
+          format: date-time
+          description: date of creation of the object
+        updated:
+          type: string
+          format: date-time
+          description: date of the last update
+        summary:
+          type: string
+          description: title of the event
+        creator:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            self:
+              type: boolean
+        organizer:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            self:
+              type: boolean
+        start:
+          type: object
+          properties:
+            dateTime:
+              type: string
+              format: date-time
+            timeZone:
+              type: string
+              example: Africa/Casablanca
+        end:
+          type: object
+          properties:
+            dateTime:
+              type: string
+              format: date-time
+            timeZone:
+              type: string
+              example: Africa/Casablanca
+        iCalUID:
+          type: string
+          format: email
+          example: 2ck8faconarkpmaheblrl7arot@google.com
+          description: irrelevant
+        sequence:
+          type: number
+          description: irrelevant
+        reminders:
+          type: object
+          properties:
+            useDefault:
+              type: boolean
+        eventType:
+          type: string
+          example: default
+          description: irrelevant
+    newEventData:
+      type: object
+      properties:
+        summary:
+          type: string
+          description: title of the event
+        location:
+          type: string
+          description: location where the event will be held
+        description:
+          type: string
+          description: description of the event
+        start:
+          type: object
+          properties:
+            dateTime:
+              type: string
+              format: date-time
+            timeZone:
+              type: string
+              example: Africa/Casablanca
+        end:
+          type: object
+          properties:
+            dateTime:
+              type: string
+              format: date-time
+            timeZone:
+              type: string
+              example: Africa/Casablanca
+        reminders:
+          type: object
+          properties:
+            useDefault:
+              type: boolean
+            overrides:
+              type: array
+              items:
+                type: object
+                properties:
+                  method:
+                    type: string
+                    enum:
+                      - email
+                      - popup
+                  minutes:
+                    type: number
+                    description: reminder is set a number of minutes before the start of the event
+        recurrence:
+          type: array
+          items:
+            type: string
+            example: RRULE:FREQ=DAILY;COUNT=2
+            description: recurrence of the event to add in google calendar
+        attendees:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
