@@ -4,11 +4,11 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 
-from utils import actionEventsToday
-from utils import actionEventsRange
-from utils import actionDeleteEvent
-from utils import actionAddEvent
-from utils import actionUpdateEvent
+from actions.utils import actionEventsToday
+from actions.utils import actionEventsRange
+from actions.utils import actionDeleteEvent
+from actions.utils import actionAddEvent
+from actions.utils import actionUpdateEvent
 
 
 class ActionEventsToday(Action):
