@@ -5,7 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 const useSend = (callbackMessage) => {
   const url = 'http://localhost:5005';
   const [socket, setSocket] = useState();
-  const { user, getAccessTokenSilently } = useAuth0();
+  const { user, getAccessTokenSilently, loginWithRedirect } = useAuth0();
 
   useEffect(() => {
     setSocket(
@@ -27,6 +27,10 @@ const useSend = (callbackMessage) => {
   }, [callbackMessage, socket]);
 
   const sendMessage = ({ text }) => {
+    if (!user) {
+      alert("Please log in first to be able to talk to the chatbot")
+      loginWithRedirect()
+    }
     socket.emit("message", {
       sender: user.email,
       message: text,

@@ -1,7 +1,15 @@
 import React, { useState, useRef } from 'react';
+import MicNoneIcon from '@mui/icons-material/MicNone';
+import MicIcon from '@mui/icons-material/Mic';
+import SendIcon from '@mui/icons-material/Send';
+import { createSpeechlySpeechRecognition } from '@speechly/speech-recognition-polyfill';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
+
+const appId = 'efdfa8e3-4e48-488e-a360-fd4bbf4104fe';
+const SpeechlySpeechRecognition = createSpeechlySpeechRecognition(appId);
+SpeechRecognition.applyPolyfill(SpeechlySpeechRecognition);
 
 const FormMessage = ({ sendMessage, dummy }) => {
   const [messageValue, setMessageValue] = useState('');
@@ -14,7 +22,7 @@ const FormMessage = ({ sendMessage, dummy }) => {
     e.preventDefault();
     resetTranscript();
     setListening(true);
-    SpeechRecognition.startListening({ continuous: true });
+    SpeechRecognition.startListening({ continuous: true, language: "fr-FR" });
   };
 
   const stopListening = (e) => {
@@ -27,33 +35,42 @@ const FormMessage = ({ sendMessage, dummy }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    sendMessage(messageValue);
-    setMessageValue('');
-    dummy.current.scrollIntoView({ behavior: "smooth" })
+    if (messageValue) {
+      e.preventDefault();
+      sendMessage(messageValue);
+      setMessageValue('');
+      dummy.current.scrollIntoView({ behavior: "smooth" })
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="form">
       <input
-        value={listening ? transcript : messageValue}
+        value={listening ? transcript.toLowerCase() : messageValue.toLowerCase()}
         onChange={(e) => setMessageValue(e.target.value)}
         placeholder="Message #Chatbot"
         type="text"
         className="message-field"
       />
-      <input
-        type="button"
-        className="form-btn voice-btn"
-        value={listening ? 'stop' : 'start'}
-        onClick={listening ? stopListening : startListening}
-      />
-      <input
-        type="submit"
-        className="form-btn send-btn"
-        value="Send"
-        disabled={!messageValue}
-      />
+      <div className='form-btn voice-btn' style={{
+        display: 'grid',
+        alignItems: "center",
+        justifyContent: "center"
+      }}>
+        {
+          listening ?
+            <MicIcon fontSize='large' onClick={stopListening} />
+            :
+            <MicNoneIcon fontSize='large' onClick={startListening} />
+        }
+      </div>
+      <div className='form-btn voice-btn' style={{
+        display: 'grid',
+        alignItems: "center",
+        justifyContent: "center"
+      }}>
+        <SendIcon onClick={handleSubmit} />
+      </div>
     </form>
   );
 };

@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
+import HomeIcon from '@mui/icons-material/Home';
 import ChatIcon from '@mui/icons-material/Chat';
 import { Link } from "react-router-dom";
 import logo from "../assets/mascir-logo.jpg"
@@ -110,6 +111,12 @@ const Navbar = () => {
               >
                 <MenuItem>
                   <ListItemIcon>
+                    <HomeIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Link to="/">Home</Link>
+                </MenuItem>
+                <MenuItem>
+                  <ListItemIcon>
                     <PersonIcon fontSize="small" />
                   </ListItemIcon>
                   <Link to="/profile">Profile</Link>
@@ -118,7 +125,7 @@ const Navbar = () => {
                   <ListItemIcon>
                     <ChatIcon fontSize="small" />
                   </ListItemIcon>
-                  <Link to="/">Chat</Link>
+                  <Link to="/chatbot">Chat</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={() => logoutWithRedirect()}>
