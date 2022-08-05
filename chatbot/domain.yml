@@ -8,26 +8,92 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - create_event
+  - inform_create
+
+entities:
+  - summary
+  - start
+  - end
+  - time
+
+slots:
+  summary:
+    type: text
+    mappings: 
+    - type: from_entity
+      entity: summary
+  start:
+    type: any
+    mappings: 
+    - type: from_entity
+      entity: time
+  end:
+    type: any
+    mappings: 
+    - type: from_entity
+      entity: time
+  description:
+    type: text
+    mappings: 
+    - type: from_text
+      # intent: create_event
+      conditions:
+      - active_loop: create_form
+        requested_slot: description
+
+forms:
+  create_form:
+    required_slots:
+        - summary
+        - start
+        - end
+        - description
+    
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
+  - text: "Bonjour! comment vas-tu?"
 
   utter_cheer_up:
-  - text: "Here is something to cheer you up:"
+  - text: "Voila quelque chose pour te rendre heureux:"
     image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
-  - text: "Did that help you?"
+  - text: "Cela t'a aidé ?"
 
   utter_happy:
-  - text: "Great, carry on!"
+  - text: "Super, prend soin de toi !"
 
   utter_goodbye:
   - text: "Bye"
 
   utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+  - text: "Je suis un bot, fait par Rasa."
+
+  utter_out_of_scope:
+  - text: "Désolé, j ai pas compris"
+
+  utter_ask_summary:
+  - text: "Quel est le titre de l'evenement ?"
+
+  utter_ask_start:
+  - text: "Cela pour quelle date ?"
+
+  utter_ask_end:
+  - text: "Quand est ce que cela va terminer ?"
+
+  utter_ask_description:
+  - text: "Donnez moi une petite description sur cet evenement "
+
+  utter_submit_create:
+  - text: "{summary},{start},{end},{description}"
+
+
+actions:
+  - "action_add_event"
+  - "action_reset_create"
+  - "validate_create_form"
 
 session_config:
   session_expiration_time: 60

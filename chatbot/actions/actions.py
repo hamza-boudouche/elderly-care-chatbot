@@ -3,12 +3,25 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
+from rasa_sdk.forms import FormValidationAction
+from rasa_sdk.types import DomainDict
 
 from actions.utils import actionEventsToday
 from actions.utils import actionEventsRange
 from actions.utils import actionDeleteEvent
 from actions.utils import actionAddEvent
 from actions.utils import actionUpdateEvent
+
+
+class ResetCreateForm(Action):
+
+    def name(self) -> Text:
+        return "action_reset_create"
+
+    def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return [SlotSet("summary", None), SlotSet("start", None), SlotSet("end", None), SlotSet("description", None)]
 
 
 class ActionEventsToday(Action):
@@ -70,7 +83,7 @@ class ActionAddEvent(Action):
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         dispatcher.utter_message(
-            text=f"adding a new event ...")
+            text=f"Création d'un nouveau evenement ...")
         summary = tracker.get_slot('summary')
         start = tracker.get_slot('start')
         end = tracker.get_slot('end')
@@ -98,3 +111,63 @@ class ActionUpdateEvent(Action):
         description = tracker.get_slot('description')
         messages, updatedEvent = await actionUpdateEvent(event, humanIndex, summary, description, start, end)
         return []
+
+
+class ValidateRestaurantForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_create_form"
+
+
+    def validate_start(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate start value."""
+
+        try:
+            slot_value = slot_value['from']
+            return {"start": slot_value}
+        except:
+            return {"start": slot_value}
+
+    def validate_end(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate end value."""
+
+        try:
+            slot_value = slot_value['from']
+            return {"end": slot_value}
+        except:
+            return {"end": slot_value}
+
+    def validate_summary(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate description value."""
+
+        return {"summary": slot_value}
+
+    def validate_description(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate description value."""
+
+        return {"description": slot_value}
+
+    
