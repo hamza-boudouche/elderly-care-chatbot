@@ -16,8 +16,8 @@ let youtubeControls = undefined
 function createWindow() {
 	// Create the browser window. 
 	const win = new BrowserWindow({
-		width: 600,
-		height: 700,
+		width: 700,
+		height: 800,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: true,

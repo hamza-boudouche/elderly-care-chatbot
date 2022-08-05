@@ -22,6 +22,8 @@ const Message = ({ message: { local, text }, hidden, end }) => {
             width: 50,
             height: 50,
             borderRadius: "50%",
+            backgroundColor: "rgb(167, 171, 174)",
+            border: "1px solid grey"
           }}
         />
       </div>

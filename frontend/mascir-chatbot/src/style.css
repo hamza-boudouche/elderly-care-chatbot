@@ -1,13 +1,14 @@
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
   color: rgb(113, 178, 235);
+  /* color: rgb(167, 171, 174); */
 }
 
 body,
 #root {
   margin: 0;
   padding: 0;
-  background-color: #838383;
+  background-color: #cbcbcb;
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -36,6 +37,72 @@ body,
   height: 80vh;
   overflow-y: auto;
   padding-right: 2px;
+}
+
+h1 {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-size: 50px;
+  color: #0062a8;
+  -webkit-transition: all 0.4s ease 0s;
+  -o-transition: all 0.4s ease 0s;
+  transition: all 0.4s ease 0s;
+}
+
+h1 span {
+  display: block;
+  font-size: 3em;
+  line-height: 1.6;
+}
+h1 em {
+  font-style: normal;
+  font-weight: 600;
+}
+
+.two h1 {
+  text-transform: capitalize;
+}
+.two h1:before {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 2px;
+  content: "";
+  background-color: #0066ff;
+}
+
+.two h1 span {
+  font-size: 20px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  line-height: 3em;
+  padding-left: 0.25em;
+  color: rgba(0, 35, 48, 0.932);
+  padding-bottom: 10px;
+}
+.alt-two h1 {
+  text-align: center;
+}
+.alt-two h1:before {
+  left: 50%;
+  margin-left: -30px;
+}
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scroll::-webkit-scrollbar-track {
+  display: none;
+}
+
+.no-scroll::-webkit-scrollbar-thumb {
+  display: none;
 }
 
 .chatbot::-webkit-scrollbar {
@@ -136,6 +203,7 @@ body,
   min-width: 60px;
   flex-basis: 40px;
   width: 15%;
+  height: 100%;
 }
 
 .voice-btn:active,
