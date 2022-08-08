@@ -11,6 +11,7 @@ from actions.utils import actionEventsRange
 from actions.utils import actionDeleteEvent
 from actions.utils import actionAddEvent
 from actions.utils import actionUpdateEvent
+from actions.utils import actionAdditionalInfo
 
 from deep_translator import GoogleTranslator
 import nltk
@@ -104,6 +105,22 @@ class ActionUpdateEvent(Action):
         humanIndex = tracker.get_slot('human_index')
         description = tracker.get_slot('description')
         messages, updatedEvent = await actionUpdateEvent(event, humanIndex, summary, description, start, end)
+        for message in messages:
+            dispatcher.utter_message(text=message.get("text"))
+        return []
+
+
+class ActionAdditionalInfo(Action):
+    def name(self) -> Text:
+        return "action_additional_info"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        search_query = tracker.get_slot('search_query')
+        messages = await actionAdditionalInfo(search_query)
+        for message in messages:
+            dispatcher.utter_message(text=message.get("text"))
         return []
 
 
