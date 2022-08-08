@@ -11,6 +11,7 @@ intents:
   - create_event
   - inform_create
   - wikipedia
+  - get_event
 
 entities:
   - start
@@ -96,6 +97,7 @@ actions:
   - "action_add_event"
   - "validate_create_form"
   - "action_wikipedia"
+  - "action_get_events_today"
 
 session_config:
   session_expiration_time: 60

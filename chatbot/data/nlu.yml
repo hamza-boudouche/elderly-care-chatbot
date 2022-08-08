@@ -101,4 +101,11 @@ nlu:
     - pourquoi devenir un ingénieur ?
     - pourquoi l anglais est la langue la plus repandue dans le monde ?  
     
-
+- intent: get_event
+  examples: |
+    - je veux voir les evenement
+    - donnez moi la liste des evenements
+    - Rappelez moi de mes evenements svp
+    - la liste des evenements s il vous plait
+    - quels sont les evenements d aujourd'hui ?
+    - je veux jetter un oeil sur la liste des evenements
