@@ -51,7 +51,6 @@ async def actionAdditionalInfo(search_query):
                 value = parse_markdown(value)
                 messages.append(
                     {
-                        "type": "markdown",
                         "text": f"{key}:\n{value}"
                     }
                 )
