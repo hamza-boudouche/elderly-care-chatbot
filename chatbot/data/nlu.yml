@@ -1,17 +1,6 @@
 version: "3.1"
 
 nlu:
-- lookup: summary
-  examples: |
-    - café
-    - réunion
-    - appel video
-    - reunion
-    - promenade
-    - medicaments
-    - médicament
-    - anniversaire
-
 
 - intent: greet
   examples: |
@@ -80,22 +69,36 @@ nlu:
     - je veux ajouter un evenement
     - créer un evenement svp
     - je veux créer un evenement pour la [semaine prochaine](start)
-    - Rappelez moi de prendre un [café](summary)
+    - Rappelez moi de prendre un café
     - ajouter un evenement pour [aujourd'hui](start)
     - ajouter un evenement pour [demain matin](start) jusqu'au [lendemain](end)
-    - rappellez moi de [médicaments](summary) dans [20 minutes](start)
-    - je veux prendre un [café] dans [15 minutes](start)
+    - rappellez moi de médicaments dans [20 minutes](start)
+    - je veux prendre un café dans [15 minutes](start)
 
 - intent: inform_create
   examples: |
     - pour [aujourd'hui](start)
     - [demain matin](start)
-    - un [café](summary) dans [15 minutes](start)
-    - [médicaments](summary)
+    - un café dans [15 minutes](start)
     - [15 minutes](start)
-    - [réunion](summary)
     - jusqu' au [demain](end)
-    - [café](summary)
     - [samedi soir](end)
     - [trois heures](end)
+
+- intent: wikipedia
+  examples: |
+    - qui est michael jackson ?
+    - qui est le president de l'amerique
+    - qui est cristiano ronaldo ?
+    - qui est lionel messi
+    - qui est le roi de la foret 
+    - c est quoi le corona virus ?
+    - c quoi la gerre mondiale
+    - c est quoi la marche verte ?
+    - donnez moi des informations sur le maroc
+    - je veux des information a propos des dinosaurs
+    - pourquoi python est le meilleur language de programmation ?
+    - pourquoi devenir un ingénieur ?
+    - pourquoi l anglais est la langue la plus repandue dans le monde ?  
+    
 

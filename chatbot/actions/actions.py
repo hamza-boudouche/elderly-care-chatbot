@@ -12,16 +12,10 @@ from actions.utils import actionDeleteEvent
 from actions.utils import actionAddEvent
 from actions.utils import actionUpdateEvent
 
-
-class ResetCreateForm(Action):
-
-    def name(self) -> Text:
-        return "action_reset_create"
-
-    def run(self, dispatcher: CollectingDispatcher,
-                  tracker: Tracker,
-                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return [SlotSet("summary", None), SlotSet("start", None), SlotSet("end", None), SlotSet("description", None)]
+from deep_translator import GoogleTranslator
+import nltk
+import wikipedia
+import wikipediaapi
 
 
 class ActionEventsToday(Action):
@@ -33,7 +27,7 @@ class ActionEventsToday(Action):
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         dispatcher.utter_message(
-            text="Here are the events you have for the next 24 hours")
+            text="Voici les événements que vous avez pour les prochaines 24 heures")
         events = await actionEventsToday()
         for event in events:
             dispatcher.utter_message(text=event.get("text"))
@@ -91,7 +85,7 @@ class ActionAddEvent(Action):
         messages, newEvent = await actionAddEvent(summary, description, start, end)
         for message in messages:
             dispatcher.utter_message(text=message.get("text"))
-        return [SlotSet("event", newEvent)]
+        return [SlotSet("event", newEvent), SlotSet("summary", None), SlotSet("start", None), SlotSet("end", None), SlotSet("description", None)]
 
 
 class ActionUpdateEvent(Action):
@@ -113,7 +107,7 @@ class ActionUpdateEvent(Action):
         return []
 
 
-class ValidateRestaurantForm(FormValidationAction):
+class ValidateCreateForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_create_form"
 
@@ -169,5 +163,53 @@ class ValidateRestaurantForm(FormValidationAction):
         """Validate description value."""
 
         return {"description": slot_value}
+
+class ActionWikipedia(Action):
+    def name(self) -> Text:
+        return "action_wikipedia"
+
+    def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        # translate user question to english :
+        text = tracker.latest_message['text']
+        translated_text = GoogleTranslator(source='fr', target='en').translate(text)
+
+        # POS tagging :
+        preprocessed_text = nltk.word_tokenize(translated_text.lower())
+        pos_val = nltk.pos_tag(preprocessed_text, tagset='universal')
+
+        # delete indesirable words and construct the keyword
+        to_delete = ['ADV', 'CONJ', 'PRT', 'PRON','VERB', '.',  'X']
+        key_word = ''
+        for tk in pos_val:
+            if tk[1] not in to_delete:
+                key_word += tk[0] + ' '
+
+        # search in wikipedia
+        results = wikipedia.search(key_word, results=10, suggestion=False)
+        if len(results) == 0:
+            dispatcher.utter_message(text=f"Désolé, Aucun résultat correspond à votre recherche")
+            return []
+        
+        wiki = wikipediaapi.Wikipedia('en')
+        exists = False
+        for i in range(len(results)):
+            page = wiki.page(results[i])
+            if page.exists() == True:
+                exists = True
+                break
+
+        # Display the answer 
+        if exists == False:
+            dispatcher.utter_message(text=f"Désolé, La page que vous cherchez n'existe pas")
+            return []
+        else:
+            reponse = page.summary.split('\n')[0]
+            translated_reponse = GoogleTranslator(source='en', target='fr').translate(reponse)
+            dispatcher.utter_message(text=f"{translated_reponse}")
+            return []
+
 
     

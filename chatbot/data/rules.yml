@@ -35,4 +35,8 @@ rules:
     - requested_slot: null
   # The actions we want to run when the form is submitted.
   - action: utter_submit_create
-  - action: action_reset_create
+
+- rule: make wikipedia search anytime the user wants to
+  steps:
+  - intent: wikipedia
+  - action: action_wikipedia

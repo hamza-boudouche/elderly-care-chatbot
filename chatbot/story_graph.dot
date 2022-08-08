@@ -7,8 +7,8 @@ digraph  {
 8 [class=active, fontsize=12, label=action_reset_create];
 9 [class="intent dashed active", label="  ?  ", shape=rect];
 10 [class="intent active", fillcolor=lightblue, label="/create_event", shape=rect, style=filled];
-11 [class="intent active", fillcolor=lightblue, label="/inform_create", shape=rect, style=filled];
-12 [class="intent active", fillcolor=lightblue, label="/nlu_fallback", shape=rect, style=filled];
+11 [class="intent active", fillcolor=lightblue, label="/create_event", shape=rect, style=filled];
+12 [class="intent active", fillcolor=lightblue, label="/inform_create", shape=rect, style=filled];
 0 -> "-1"  [class="", key=NONE, label=""];
 0 -> 1  [class=active, key=NONE, label=""];
 1 -> 10  [class=active, key=0];

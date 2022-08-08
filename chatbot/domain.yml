@@ -10,9 +10,9 @@ intents:
   - bot_challenge
   - create_event
   - inform_create
+  - wikipedia
 
 entities:
-  - summary
   - start
   - end
   - time
@@ -21,8 +21,10 @@ slots:
   summary:
     type: text
     mappings: 
-    - type: from_entity
-      entity: summary
+    - type: from_text
+      conditions:
+      - active_loop: create_form
+        requested_slot: summary
   start:
     type: any
     mappings: 
@@ -87,13 +89,13 @@ responses:
   - text: "Donnez moi une petite description sur cet evenement "
 
   utter_submit_create:
-  - text: "{summary},{start},{end},{description}"
+  - text: "create_event : {summary},{start},{end},{description}"
 
 
 actions:
   - "action_add_event"
-  - "action_reset_create"
   - "validate_create_form"
+  - "action_wikipedia"
 
 session_config:
   session_expiration_time: 60

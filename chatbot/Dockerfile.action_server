@@ -17,4 +17,6 @@ RUN pip install --no-cache-dir --upgrade -r /tmp/requirements.txt
 
 COPY ./actions /app/actions
 
+COPY ./nltk_data /nltk_data
+
 USER 1001
