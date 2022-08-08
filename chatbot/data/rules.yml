@@ -34,9 +34,14 @@ rules:
   - slot_was_set:
     - requested_slot: null
   # The actions we want to run when the form is submitted.
-  - action: utter_submit_create
+  - action: action_add_event
 
 - rule: make wikipedia search anytime the user wants to
   steps:
   - intent: wikipedia
   - action: action_wikipedia
+
+- rule: give the events list anytime the user wants to
+  steps:
+  - intent: get_event
+  - action: action_get_events_today

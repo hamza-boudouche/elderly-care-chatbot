@@ -13,6 +13,7 @@ from actions.utils import actionAddEvent
 from actions.utils import actionUpdateEvent
 
 from deep_translator import GoogleTranslator
+import re
 import nltk
 import wikipedia
 import wikipediaapi
@@ -172,6 +173,24 @@ class ActionWikipedia(Action):
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        # Delete all what is between brackets :
+        def clean(test_str):
+            ret = ''
+            skip1c = 0
+            skip2c = 0
+            for i in test_str:
+                if i == '[':
+                    skip1c += 1
+                elif i == '(':
+                    skip2c += 1
+                elif i == ']' and skip1c > 0:
+                    skip1c -= 1
+                elif i == ')'and skip2c > 0:
+                    skip2c -= 1
+                elif skip1c == 0 and skip2c == 0:
+                    ret += i
+            return ret
+
         # translate user question to english :
         text = tracker.latest_message['text']
         translated_text = GoogleTranslator(source='fr', target='en').translate(text)
@@ -184,8 +203,11 @@ class ActionWikipedia(Action):
         to_delete = ['ADV', 'CONJ', 'PRT', 'PRON','VERB', '.',  'X']
         key_word = ''
         for tk in pos_val:
-            if tk[1] not in to_delete:
-                key_word += tk[0] + ' '
+            if tk[0] in ['information', 'informations', 'about', 'wich']:
+                pass
+            else:
+                if tk[1] not in to_delete:
+                    key_word += tk[0] + ' '
 
         # search in wikipedia
         results = wikipedia.search(key_word, results=10, suggestion=False)
@@ -206,9 +228,20 @@ class ActionWikipedia(Action):
             dispatcher.utter_message(text=f"Désolé, La page que vous cherchez n'existe pas")
             return []
         else:
-            reponse = page.summary.split('\n')[0]
-            translated_reponse = GoogleTranslator(source='en', target='fr').translate(reponse)
-            dispatcher.utter_message(text=f"{translated_reponse}")
+            response_list = page.summary.split('.')
+            response = ''
+
+            if len(response_list) >= 2 :
+                for sent in response_list[:2]:
+                    response += sent+'.'
+                response = clean(response)
+                translated_response = GoogleTranslator(source='en', target='fr').translate(response)
+                dispatcher.utter_message(text=f"{translated_response}")
+            else:
+                response = response_list[0]+'.'
+                response = clean(response)
+                translated_response = GoogleTranslator(source='en', target='fr').translate(response)
+                dispatcher.utter_message(text=f"{translated_response}")
             return []
 
 
