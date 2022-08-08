@@ -11,3 +11,32 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: out-of-scope
+  steps:
+  - intent: nlu_fallback
+  - action: utter_out_of_scope
+
+- rule: Activate create form
+  steps:
+  - intent: create_event
+  - action: create_form
+  - active_loop: create_form
+
+- rule: Submit create form
+  condition:
+  # Condition that form is active.
+  - active_loop: create_form
+  steps:
+  # Form is deactivated
+  - action: create_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: utter_submit_create
+
+- rule: make wikipedia search anytime the user wants to
+  steps:
+  - intent: wikipedia
+  - action: action_wikipedia
