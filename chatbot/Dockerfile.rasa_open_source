@@ -4,6 +4,10 @@ EXPOSE 5005
 
 WORKDIR /app
 
+RUN pip3 install rasa[spacy]
+
+RUN python -m spacy download fr_core_news_lg
+
 COPY ./ ./
 
 ENTRYPOINT [ "" ]

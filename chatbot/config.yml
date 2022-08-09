@@ -7,9 +7,9 @@ recipe: default.v1
 language: fr
 
 pipeline:
-# # No configuration for the NLU pipeline was provided. The following default pipeline was used to train your model.
-# # If you'd like to customize it, uncomment and adjust the pipeline.
-# # See https://rasa.com/docs/rasa/tuning-your-model for more information.
+  # # No configuration for the NLU pipeline was provided. The following default pipeline was used to train your model.
+  # # If you'd like to customize it, uncomment and adjust the pipeline.
+  # # See https://rasa.com/docs/rasa/tuning-your-model for more information.
   # - name: WhitespaceTokenizer
   # - name: RegexFeaturizer
   # - name: LexicalSyntacticFeaturizer
@@ -68,14 +68,14 @@ pipeline:
     timezone: "Africa/Casablanca"
     # Timeout for receiving response from http url of the running duckling server
     # if not set the default timeout of duckling http url is set to 3 seconds.
-    timeout : 3
+    timeout: 3
 
 # Configuration for Rasa Core.
 # https://rasa.com/docs/rasa/core/policies/
 policies:
-# # No configuration for policies was provided. The following default policies were used to train your model.
-# # If you'd like to customize them, uncomment and adjust the policies.
-# # See https://rasa.com/docs/rasa/policies for more information.
+  # # No configuration for policies was provided. The following default policies were used to train your model.
+  # # If you'd like to customize them, uncomment and adjust the policies.
+  # # See https://rasa.com/docs/rasa/policies for more information.
   - name: MemoizationPolicy
   - name: RulePolicy
   # - name: UnexpecTEDIntentPolicy
