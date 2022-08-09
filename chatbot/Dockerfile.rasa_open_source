@@ -10,7 +10,7 @@ ENTRYPOINT [ "" ]
 
 USER root
 
-RUN rasa train
+# RUN rasa train
 
 USER 1001
 

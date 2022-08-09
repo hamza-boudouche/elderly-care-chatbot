@@ -18,6 +18,7 @@ import re
 import nltk
 import wikipedia
 import wikipediaapi
+import requests
 
 
 class ActionEventsToday(Action):
@@ -260,6 +261,41 @@ class ActionWikipedia(Action):
                 translated_response = GoogleTranslator(source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{translated_response}")
             return []
+
+class ActionBlenderBot(Action):
+    def name(self) -> Text:
+        return "action_blenderbot"
+
+    def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        user_input = tracker.latest_message['text']
+        user_input = GoogleTranslator(source='fr', target='en').translate(user_input)
+
+        user_historic = tracker.get_slot('user_historic')
+        bot_historic = tracker.get_slot('bot_historic')
+
+        API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
+        headers = {"Authorization": "Bearer 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"}
+
+        def query(payload):
+            response = requests.post(API_URL, headers=headers, json=payload)
+            return response.json()
+
+        output = query({
+            "inputs": {
+                "past_user_inputs": user_historic,
+                "generated_responses": bot_historic,
+                "text": user_input
+            },
+        })
+
+        dispatcher.utter_message(text=f"{output.get('generated_text')}")
+
+        user_historic = output.get('conversation')
+
+        return []
 
 
     
