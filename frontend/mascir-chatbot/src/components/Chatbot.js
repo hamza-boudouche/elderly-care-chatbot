@@ -30,7 +30,7 @@ const Chatbot = () => {
     ({ text }) => {
       const msg = new SpeechSynthesisUtterance()
       msg.text = text
-      window.speechSynthesis.speak(msg)
+      // window.speechSynthesis.speak(msg)
       dispatch({
         type: "addMessage",
         message: {

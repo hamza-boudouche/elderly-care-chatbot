@@ -9,22 +9,50 @@ stories:
   - intent: mood_great
   - action: utter_happy
 
-- story: sad path 1
+- story: wikipedia search & additional informations
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
+  - intent: wikipedia
+  - action: action_wikipedia
+  - action: utter_additional
   - intent: affirm
-  - action: utter_happy
+  - action: action_additional_info
 
-- story: sad path 2
+- story: wikipedia search & no additional informations
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
+  - intent: wikipedia
+  - action: action_wikipedia
+  - action: utter_additional
   - intent: deny
-  - action: utter_goodbye
+  - action: utter_ok
+
+# - story: User interrupts the create form and doesn't want to continue
+#   steps:
+#   - intent: create_event
+#   - action: create_form
+#   - active_loop: create_form
+#   - intent: stop
+#   - action: utter_cancel_create_form
+#   - action: action_deactivate_loop
+#   - active_loop: null
+#   - action: action_reset_ceate
+
+# - story: sad path 1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: mood_unhappy
+#   - action: utter_cheer_up
+#   - action: utter_did_that_help
+#   - intent: affirm
+#   - action: utter_happy
+
+# - story: sad path 2
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: mood_unhappy
+#   - action: utter_cheer_up
+#   - action: utter_did_that_help
+#   - intent: deny
+#   - action: utter_goodbye
+

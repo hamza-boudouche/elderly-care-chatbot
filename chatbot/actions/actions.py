@@ -14,11 +14,15 @@ from actions.utils import actionUpdateEvent
 from actions.utils import actionAdditionalInfo
 
 from deep_translator import GoogleTranslator
-import re
+from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration, BlenderbotConfig
 import nltk
 import wikipedia
 import wikipediaapi
-import requests
+
+# BlenderBot model
+mname = "./blenderbot-400M-distill"
+model = BlenderbotForConditionalGeneration.from_pretrained(mname, local_files_only=True)
+tokenizer = BlenderbotTokenizer.from_pretrained(mname, local_files_only=True)
 
 
 class ActionEventsToday(Action):
@@ -79,8 +83,7 @@ class ActionAddEvent(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(
-            text=f"Création d'un nouveau evenement ...")
+        dispatcher.utter_message(text=f"Création d'un nouveau evenement ...")
         summary = tracker.get_slot('summary')
         start = tracker.get_slot('start')
         end = tracker.get_slot('end')
@@ -88,7 +91,17 @@ class ActionAddEvent(Action):
         messages, newEvent = await actionAddEvent(summary, description, start, end)
         for message in messages:
             dispatcher.utter_message(text=message.get("text"))
-        return [SlotSet("event", newEvent), SlotSet("summary", None), SlotSet("start", None), SlotSet("end", None), SlotSet("description", None)]
+        return [SlotSet("event", newEvent)]
+
+class ActionResetCreate(Action):
+    def name(self) -> Text:
+        return "action_reset_ceate"
+
+    def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return [SlotSet("summary", None), SlotSet("start", None), SlotSet("end", None), SlotSet("description", None)]
+
 
 
 class ActionUpdateEvent(Action):
@@ -107,20 +120,6 @@ class ActionUpdateEvent(Action):
         humanIndex = tracker.get_slot('human_index')
         description = tracker.get_slot('description')
         messages, updatedEvent = await actionUpdateEvent(event, humanIndex, summary, description, start, end)
-        for message in messages:
-            dispatcher.utter_message(text=message.get("text"))
-        return []
-
-
-class ActionAdditionalInfo(Action):
-    def name(self) -> Text:
-        return "action_additional_info"
-
-    async def run(self, dispatcher: CollectingDispatcher,
-                  tracker: Tracker,
-                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        search_query = tracker.get_slot('search_query')
-        messages = await actionAdditionalInfo(search_query)
         for message in messages:
             dispatcher.utter_message(text=message.get("text"))
         return []
@@ -260,7 +259,21 @@ class ActionWikipedia(Action):
                 response = clean(response)
                 translated_response = GoogleTranslator(source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{translated_response}")
-            return []
+            return [SlotSet('search_query',key_word)]
+
+class ActionAdditionalInfo(Action):
+    def name(self) -> Text:
+        return "action_additional_info"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        search_query = tracker.get_slot('search_query')
+        messages = await actionAdditionalInfo(search_query)
+        for message in messages:
+            dispatcher.utter_message(text=message.get("text"))
+        return []
+    
 
 class ActionBlenderBot(Action):
     def name(self) -> Text:
@@ -270,32 +283,44 @@ class ActionBlenderBot(Action):
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        NEXT_UTTERANCE = tracker.get_slot('NEXT_UTTERANCE')
+        historics = tracker.get_slot('historics')
+        if NEXT_UTTERANCE == None:
+            NEXT_UTTERANCE = ("")
+        if historics == None:
+            historics = []
+
         user_input = tracker.latest_message['text']
         user_input = GoogleTranslator(source='fr', target='en').translate(user_input)
+        user_input = "<s> " + user_input + " </s> "
 
-        user_historic = tracker.get_slot('user_historic')
-        bot_historic = tracker.get_slot('bot_historic')
+        historics.append(user_input)
 
-        API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
-        headers = {"Authorization": "Bearer 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"}
+        NEXT_UTTERANCE += user_input
+        inputs = tokenizer([NEXT_UTTERANCE], return_tensors="pt")
 
-        def query(payload):
-            response = requests.post(API_URL, headers=headers, json=payload)
-            return response.json()
+        # Delete first historics elements if historics_tokens_number > 128(max_length)
+        while len(inputs['attention_mask'][0]) > 128:
+            NEXT_UTTERANCE = ("")
+            historics = historics[1:]
+            for h in historics:
+                NEXT_UTTERANCE += h
+            inputs = tokenizer([NEXT_UTTERANCE], return_tensors="pt")
 
-        output = query({
-            "inputs": {
-                "past_user_inputs": user_historic,
-                "generated_responses": bot_historic,
-                "text": user_input
-            },
-        })
+        next_reply_ids = model.generate(**inputs)
+        output = tokenizer.batch_decode(next_reply_ids, skip_special_tokens=True)[0]
 
-        dispatcher.utter_message(text=f"{output.get('generated_text')}")
+        reply = GoogleTranslator(source='en', target='fr').translate(output)
+        dispatcher.utter_message(text=f"{reply}")
 
-        user_historic = output.get('conversation')
+        output = "<s> " + output + " </s> "
+        NEXT_UTTERANCE += output  
+        
+        historics.append(output)
 
-        return []
+        return [SlotSet('historics',historics), SlotSet('NEXT_UTTERANCE',NEXT_UTTERANCE)]
+        
+        
 
 
     
