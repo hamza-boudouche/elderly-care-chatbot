@@ -1,6 +1,7 @@
 version: "3.1"
 
 rules:
+<<<<<<< HEAD
   - rule: Say goodbye anytime the user says goodbye
     steps:
       - intent: goodbye
@@ -39,3 +40,66 @@ rules:
     steps:
       - intent: get_event
       - action: action_get_events_today
+=======
+
+- rule: greet path
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: out-of-scope
+  steps:
+  - intent: nlu_fallback
+  - action: action_blenderbot
+
+- rule: Activate create form
+  steps:
+  - intent: create_event
+  - action: create_form
+  - active_loop: create_form
+
+- rule: Submit create form
+  condition:
+  # Condition that form is active.
+  - active_loop: create_form
+  steps:
+  # Form is deactivated
+  - action: create_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: action_add_event
+  - action: action_reset_ceate
+
+- rule: interrupt create event form
+  condition:
+  # Condition that form is active.
+  - active_loop: create_form
+  steps:
+  - intent: stop
+  - action: action_deactivate_loop
+  - active_loop: null
+  - action: action_reset_ceate
+  - action: utter_cancel_create_form
+
+# - rule: make wikipedia search anytime the user wants to
+#   steps:
+#   - intent: wikipedia
+#   - action: action_wikipedia
+
+- rule: give the events list anytime the user wants to
+  steps:
+  - intent: get_event
+  - action: action_get_events_today
+>>>>>>> 854ddb638d3528a3f0a0bac7acae9b22e5fb5d20

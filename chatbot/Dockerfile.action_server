@@ -15,6 +15,18 @@ COPY ./requirements.txt /tmp/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /tmp/requirements.txt
 
+# install git
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git
+
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+RUN apt-get install git-lfs
+
+RUN git-lfs install
+
+RUN git clone https://huggingface.co/facebook/blenderbot-400M-distill
+
 COPY ./actions /app/actions
 
 COPY ./nltk_data /nltk_data

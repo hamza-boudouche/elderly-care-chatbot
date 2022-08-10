@@ -1,7 +1,5 @@
 version: "3.1"
-
 nlu:
-
 - intent: greet
   examples: |
     - hi
@@ -9,10 +7,10 @@ nlu:
     - salut
     - bonjour
     - bonsoir
-    - salut
     - allons-y
     - salut mec
     - bonne après-midi
+
 
 - intent: goodbye
   examples: |
@@ -20,6 +18,7 @@ nlu:
     - au revoir
     - bonne journée
     - bye bye
+
 
 - intent: affirm
   examples: |
@@ -29,6 +28,7 @@ nlu:
     - Ça a l'air bien
     - vrai
 
+
 - intent: deny
   examples: |
     - non
@@ -37,6 +37,7 @@ nlu:
     - certainement pas
     - pas vraiment
     - impossible
+
 
 - intent: mood_great
   examples: |
@@ -49,19 +50,21 @@ nlu:
     - bien
     - si heureux
 
-- intent: mood_unhappy
+
+- intent: stop
   examples: |
-    - Je suis triste
-    - je ne me sens pas très bien
-    - je suis déçu
-    - très triste
-    - malheureux
-    - si triste
+    - stop
+    - stoop !
+    - je veux quitter
+    - je veux plus faire ca
+    - arrete !
+
 
 - intent: bot_challenge
   examples: |
     - etes-vous un robot?
     - est-ce que je parle à un bot ?
+
 
 - intent: create_event
   examples: |
@@ -69,11 +72,9 @@ nlu:
     - je veux ajouter un evenement
     - créer un evenement svp
     - je veux créer un evenement pour la [semaine prochaine](start)
-    - Rappelez moi de prendre un café
     - ajouter un evenement pour [aujourd'hui](start)
     - ajouter un evenement pour [demain matin](start) jusqu'au [lendemain](end)
-    - rappellez moi de médicaments dans [20 minutes](start)
-    - je veux prendre un café dans [15 minutes](start)
+
 
 - intent: inform_create
   examples: |
@@ -85,13 +86,14 @@ nlu:
     - [samedi soir](end)
     - [trois heures](end)
 
+
 - intent: wikipedia
   examples: |
-    - qui est michael jackson ?
+    - qui est ce michael jackson ?
     - qui est le president de l'amerique
     - qui est cristiano ronaldo ?
     - qui est lionel messi
-    - qui est le roi de la foret 
+    - qui est le roi de la foret
     - c est quoi le corona virus ?
     - c quoi la gerre mondiale
     - c est quoi la marche verte ?
@@ -99,8 +101,9 @@ nlu:
     - je veux des information a propos des dinosaurs
     - pourquoi python est le meilleur language de programmation ?
     - pourquoi devenir un ingénieur ?
-    - pourquoi l anglais est la langue la plus repandue dans le monde ?  
-    
+    - pourquoi l anglais est la langue la plus repandue dans le monde ?
+
+
 - intent: get_event
   examples: |
     - je veux voir les evenement
