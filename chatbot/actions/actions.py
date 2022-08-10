@@ -118,6 +118,7 @@ class ActionAdditionalInfo(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print("inside the additional info action")
         search_query = tracker.get_slot('search_query')
         messages = await actionAdditionalInfo(search_query)
         for message in messages:
@@ -128,7 +129,6 @@ class ActionAdditionalInfo(Action):
 class ValidateCreateForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_create_form"
-
 
     def validate_start(
         self,
@@ -182,13 +182,14 @@ class ValidateCreateForm(FormValidationAction):
 
         return {"description": slot_value}
 
+
 class ActionWikipedia(Action):
     def name(self) -> Text:
         return "action_wikipedia"
 
     def run(self, dispatcher: CollectingDispatcher,
-                  tracker: Tracker,
-                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         # Delete all what is between brackets :
         def clean(test_str):
@@ -202,7 +203,7 @@ class ActionWikipedia(Action):
                     skip2c += 1
                 elif i == ']' and skip1c > 0:
                     skip1c -= 1
-                elif i == ')'and skip2c > 0:
+                elif i == ')' and skip2c > 0:
                     skip2c -= 1
                 elif skip1c == 0 and skip2c == 0:
                     ret += i
@@ -210,14 +211,15 @@ class ActionWikipedia(Action):
 
         # translate user question to english :
         text = tracker.latest_message['text']
-        translated_text = GoogleTranslator(source='fr', target='en').translate(text)
+        translated_text = GoogleTranslator(
+            source='fr', target='en').translate(text)
 
         # POS tagging :
         preprocessed_text = nltk.word_tokenize(translated_text.lower())
         pos_val = nltk.pos_tag(preprocessed_text, tagset='universal')
 
         # delete indesirable words and construct the keyword
-        to_delete = ['ADV', 'CONJ', 'PRT', 'PRON','VERB', '.',  'X']
+        to_delete = ['ADV', 'CONJ', 'PRT', 'PRON', 'VERB', '.',  'X']
         key_word = ''
         for tk in pos_val:
             if tk[0] in ['information', 'informations', 'about', 'wich']:
@@ -229,9 +231,10 @@ class ActionWikipedia(Action):
         # search in wikipedia
         results = wikipedia.search(key_word, results=10, suggestion=False)
         if len(results) == 0:
-            dispatcher.utter_message(text=f"Désolé, Aucun résultat correspond à votre recherche")
+            dispatcher.utter_message(
+                text=f"Désolé, Aucun résultat correspond à votre recherche")
             return []
-        
+
         wiki = wikipediaapi.Wikipedia('en')
         exists = False
         for i in range(len(results)):
@@ -240,26 +243,26 @@ class ActionWikipedia(Action):
                 exists = True
                 break
 
-        # Display the answer 
+        # Display the answer
         if exists == False:
-            dispatcher.utter_message(text=f"Désolé, La page que vous cherchez n'existe pas")
+            dispatcher.utter_message(
+                text=f"Désolé, La page que vous cherchez n'existe pas")
             return []
         else:
             response_list = page.summary.split('.')
             response = ''
 
-            if len(response_list) >= 2 :
+            if len(response_list) >= 2:
                 for sent in response_list[:2]:
                     response += sent+'.'
                 response = clean(response)
-                translated_response = GoogleTranslator(source='en', target='fr').translate(response)
+                translated_response = GoogleTranslator(
+                    source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{translated_response}")
             else:
                 response = response_list[0]+'.'
                 response = clean(response)
-                translated_response = GoogleTranslator(source='en', target='fr').translate(response)
+                translated_response = GoogleTranslator(
+                    source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{translated_response}")
-            return []
-
-
-    
+            return [SlotSet("search_query", key_word)]
