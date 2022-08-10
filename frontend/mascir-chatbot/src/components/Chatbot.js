@@ -15,7 +15,6 @@ const Chatbot = () => {
 
   const observer = new IntersectionObserver(
     ([entry]) => {
-      console.log(entry)
       setBtnVisible(!entry.isIntersecting)
     }
   )
@@ -29,7 +28,8 @@ const Chatbot = () => {
   const addReplyMessage = useCallback(
     ({ text }) => {
       const msg = new SpeechSynthesisUtterance()
-      msg.text = text
+      const textForSpeech = text.replaceAll("-", "")
+      msg.text = textForSpeech
       window.speechSynthesis.speak(msg)
       dispatch({
         type: "addMessage",
@@ -52,8 +52,32 @@ const Chatbot = () => {
         window.api.send("message.receive", text)
       } else {
         switch (action.type) {
-          case "selenium:open":
+          case "selenium.open":
             window.api.send("selenium.open", action.payload)
+            break;
+          case "selenium.close":
+            window.api.send("selenium.close", action.payload)
+            break;
+          case "selenium.youtube.close":
+            window.api.send("selenium.youtube.close", action.payload)
+            break;
+          case "selenium.youtube.open":
+            window.api.send("selenium.youtube.open", action.payload)
+            break;
+          case "selenium.youtube.playPause":
+            window.api.send("selenium.youtube.playPause", action.payload)
+            break;
+          case "selenium.youtube.skipForward":
+            window.api.send("selenium.youtube.skipForward", action.payload)
+            break;
+          case "selenium.youtube.skipBackward":
+            window.api.send("selenium.youtube.skipBackward", action.payload)
+            break;
+          case "selenium.youtube.prevVideo":
+            window.api.send("selenium.youtube.prevVideo", action.payload)
+            break;
+          case "selenium.youtube.nextVideo":
+            window.api.send("selenium.youtube.nextVideo", action.payload)
             break;
           default:
             console.log("unsupported action type")

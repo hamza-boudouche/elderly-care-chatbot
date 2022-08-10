@@ -1,6 +1,2 @@
-from actions.utils.ActionGetEventsToday import actionEventsToday
-from actions.utils.ActionGetEventsRange import actionEventsRange
-from actions.utils.ActionDeleteEvent import actionDeleteEvent
-from actions.utils.ActionAddEvent import actionAddEvent
-from actions.utils.ActionUpdateEvent import actionUpdateEvent
-from actions.utils.ActionAdditionalInfo import actionAdditionalInfo
+from actions.utils.calendar import actionEventsToday, actionAddEvent, actionDeleteEvent, actionEventsRange, actionUpdateEvent
+from actions.utils.wikipedia import actionAdditionalInfo
