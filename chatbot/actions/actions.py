@@ -1,3 +1,4 @@
+import json
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
@@ -266,3 +267,112 @@ class ActionWikipedia(Action):
                     source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{translated_response}")
             return [SlotSet("search_query", key_word)]
+
+
+class ActionOpenYoutube(Action):
+    def name(self) -> Text:
+        return "action_open_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        url = tracker.get_slot('url')
+        dispatcher.utter_message(json_message={
+            "action": {
+                "type": "selenium.youtube.open",
+                "payload": {
+                    "url": url
+                }
+            }
+        })
+        return [SlotSet("url", None)]
+
+
+class ActionCloseYoutube(Action):
+    def name(self) -> Text:
+        return "action_close_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(json_message={
+            "action": {
+                "type": "selenium.youtube.close"
+            }
+        })
+        return []
+
+
+class ActionPlayPauseYoutube(Action):
+    def name(self) -> Text:
+        return "action_play_pause_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(json_message={
+            "action": {
+                "type": "selenium.youtube.playPause"
+            }
+        })
+        return []
+
+
+class ActionSkipForwardYoutube(Action):
+    def name(self) -> Text:
+        return "action_skip_forward_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(json_message={
+            "action": {
+                "type": "selenium.youtube.skipForward"
+            }
+        })
+        return []
+
+
+class ActionSkipBackwardYoutube(Action):
+    def name(self) -> Text:
+        return "action_skip_backward_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(json_message={
+            "action": {
+                "type": "selenium.youtube.skipBackward"
+            }
+        })
+        return []
+
+
+class ActionPrevVideoYoutube(Action):
+    def name(self) -> Text:
+        return "action_prev_video_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(json_message={
+            "action": {
+                "type": "selenium.youtube.prevVideo"
+            }
+        })
+        return []
+
+
+class ActionNextVideoYoutube(Action):
+    def name(self) -> Text:
+        return "action_next_video_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(json_message={
+            "action": {
+                "type": "selenium.youtube.nextVideo"
+            }
+        })
+        return []
