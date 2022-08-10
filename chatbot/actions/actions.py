@@ -119,6 +119,7 @@ class ActionAdditionalInfo(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print("inside the additional info action")
         search_query = tracker.get_slot('search_query')
         messages = await actionAdditionalInfo(search_query)
         for message in messages:
@@ -265,7 +266,7 @@ class ActionWikipedia(Action):
                 translated_response = GoogleTranslator(
                     source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{translated_response}")
-            return []
+            return [SlotSet("search_query", key_word)]
 
 
 class ActionOpenYoutube(Action):

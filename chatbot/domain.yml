@@ -21,83 +21,92 @@ entities:
 slots:
   summary:
     type: text
-    mappings: 
-    - type: from_text
-      conditions:
-      - active_loop: create_form
-        requested_slot: summary
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: create_form
+            requested_slot: summary
   start:
     type: any
-    mappings: 
-    - type: from_entity
-      entity: time
+    mappings:
+      - type: from_entity
+        entity: time
   end:
     type: any
-    mappings: 
-    - type: from_entity
-      entity: time
+    mappings:
+      - type: from_entity
+        entity: time
   description:
     type: text
-    mappings: 
-    - type: from_text
-      # intent: create_event
-      conditions:
-      - active_loop: create_form
-        requested_slot: description
+    mappings:
+      - type: from_text
+        # intent: create_event
+        conditions:
+          - active_loop: create_form
+            requested_slot: description
+  search_query:
+    type: any
+    mappings:
+      - type: custom
 
 forms:
   create_form:
     required_slots:
-        - summary
-        - start
-        - end
-        - description
-    
+      - summary
+      - start
+      - end
+      - description
 
 responses:
   utter_greet:
-  - text: "Bonjour! comment vas-tu?"
+    - text: "Bonjour! comment vas-tu?"
 
   utter_cheer_up:
-  - text: "Voila quelque chose pour te rendre heureux:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
+    - text: "Voila quelque chose pour te rendre heureux:"
+      image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
-  - text: "Cela t'a aidé ?"
+    - text: "Cela t'a aidé ?"
 
   utter_happy:
-  - text: "Super, prend soin de toi !"
+    - text: "Super, prend soin de toi !"
 
   utter_goodbye:
-  - text: "Bye"
+    - text: "Bye"
 
   utter_iamabot:
-  - text: "Je suis un bot, fait par Rasa."
+    - text: "Je suis un bot, fait par Rasa."
 
   utter_out_of_scope:
-  - text: "Désolé, j ai pas compris"
+    - text: "Désolé, j ai pas compris"
 
   utter_ask_summary:
-  - text: "Quel est le titre de l'evenement ?"
+    - text: "Quel est le titre de l'evenement ?"
 
   utter_ask_start:
-  - text: "Cela pour quelle date ?"
+    - text: "Cela pour quelle date ?"
 
   utter_ask_end:
-  - text: "Quand est ce que cela va terminer ?"
+    - text: "Quand est ce que cela va terminer ?"
 
   utter_ask_description:
-  - text: "Donnez moi une petite description sur cet evenement "
+    - text: "Donnez moi une petite description sur cet evenement "
 
   utter_submit_create:
-  - text: "create_event : {summary},{start},{end},{description}"
+    - text: "create_event : {summary},{start},{end},{description}"
 
+  utter_additional_info:
+    - text: "est ce que vous voulez des informations supplementaires sur ce sujet ?"
+
+  utter_ok:
+    - text: "d'accord"
 
 actions:
   - "action_add_event"
   - "validate_create_form"
   - "action_wikipedia"
   - "action_get_events_today"
+  - "action_additional_info"
 
 session_config:
   session_expiration_time: 60
