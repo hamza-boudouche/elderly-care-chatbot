@@ -59,7 +59,7 @@ pipeline:
     # url of the running duckling server
     url: "http://localhost:8000"
     # dimensions to extract
-    dimensions: ["time"]
+    dimensions: ["time", "ordinal"]
     # allows you to configure the locale, by default the language is
     # used
     locale: "fr_FR"

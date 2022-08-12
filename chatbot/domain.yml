@@ -11,11 +11,13 @@ intents:
 - mood_great
 - stop
 - wikipedia
+- inform_index
 
 entities:
 - start
 - end
 - time
+- ordinal
 
 
 slots:
@@ -46,11 +48,15 @@ slots:
     mappings:
     - type: from_entity
       entity: time
+      # conditions:
+      # - active_loop: create_form
   end:
     type: any
     mappings:
     - type: from_entity
       entity: time
+      # conditions:
+      # - active_loop: create_form
   description:
     type: text
     mappings:
@@ -58,6 +64,12 @@ slots:
       conditions:
       - active_loop: create_form
         requested_slot: description
+  index:
+    type: any
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: ordinal
 
 forms:
   create_form:
@@ -79,7 +91,7 @@ responses:
   utter_happy:
   - text: Super, prend soin de toi !
   utter_goodbye:
-  - text: Bye
+  - text: au revoir, prenez soin de vous
   utter_iamabot:
   - text: Je suis un bot, fait par Rasa.
   utter_out_of_scope:
@@ -98,6 +110,8 @@ responses:
   - text: Voulez vous des informations supplémentaires à prpos de "{search_query}" ?
   utter_ok:
   - text: D'accord
+  utter_position:
+  - text: "voila : {index}"
 
 
 actions:

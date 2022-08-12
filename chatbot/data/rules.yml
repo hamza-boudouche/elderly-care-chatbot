@@ -39,7 +39,7 @@ rules:
   - slot_was_set:
     - requested_slot: null
   # The actions we want to run when the form is submitted.
-  - action: action_add_event
+  # - action: action_add_event
   - action: action_reset_ceate
 
 - rule: interrupt create event form
@@ -62,3 +62,8 @@ rules:
   steps:
   - intent: get_event
   - action: action_get_events_today
+
+- rule: index ordinal
+  steps:
+  - intent: inform_index
+  - action: utter_position

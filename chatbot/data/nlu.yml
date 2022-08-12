@@ -55,9 +55,9 @@ nlu:
   examples: |
     - stop
     - stoop !
-    - je veux quitter
-    - je veux plus faire ca
     - arrete !
+    - arretez ceci
+    - stop s il te plait
 
 
 - intent: bot_challenge
@@ -85,6 +85,13 @@ nlu:
     - jusqu' au [demain](end)
     - [samedi soir](end)
     - [trois heures](end)
+
+- intent: inform_index
+  examples: |
+    - [le premier](index)
+    - [le deuxieme](index)
+    - je choisis [le premier](index) choix
+    - donnez moi [la troisieme](index)
 
 
 - intent: wikipedia

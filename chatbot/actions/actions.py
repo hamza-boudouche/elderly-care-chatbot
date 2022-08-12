@@ -230,7 +230,7 @@ class ActionWikipedia(Action):
         results = wikipedia.search(key_word, results=10, suggestion=False)
         if len(results) == 0:
             dispatcher.utter_message(text=f"Désolé, Aucun résultat correspond à votre recherche")
-            return []
+            return [SlotSet('search_query',key_word)]
         
         wiki = wikipediaapi.Wikipedia('en')
         exists = False
@@ -243,7 +243,7 @@ class ActionWikipedia(Action):
         # Display the answer 
         if exists == False:
             dispatcher.utter_message(text=f"Désolé, La page que vous cherchez n'existe pas")
-            return []
+            return [SlotSet('search_query',key_word)]
         else:
             response_list = page.summary.split('.')
             response = ''
