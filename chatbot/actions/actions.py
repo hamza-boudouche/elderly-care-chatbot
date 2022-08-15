@@ -1,3 +1,4 @@
+from cgitb import text
 import json
 from typing import Any, Text, Dict, List
 
@@ -19,6 +20,8 @@ from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration
 import nltk
 import wikipedia
 import wikipediaapi
+
+from youtubesearchpython.__future__ import VideosSearch
 
 # BlenderBot model
 mname = "./blenderbot-400M-distill"
@@ -247,8 +250,9 @@ class ActionWikipedia(Action):
         # search in wikipedia
         results = wikipedia.search(key_word, results=10, suggestion=False)
         if len(results) == 0:
-            dispatcher.utter_message(text=f"Désolé, Aucun résultat correspond à votre recherche")
-            return [SlotSet('search_query',key_word)]
+            dispatcher.utter_message(
+                text=f"Désolé, Aucun résultat correspond à votre recherche")
+            return [SlotSet('search_query', key_word)]
         wiki = wikipediaapi.Wikipedia('en')
         exists = False
         for i in range(len(results)):
@@ -259,8 +263,9 @@ class ActionWikipedia(Action):
 
         # Display the answer
         if exists == False:
-            dispatcher.utter_message(text=f"Désolé, La page que vous cherchez n'existe pas")
-            return [SlotSet('search_query',key_word)]
+            dispatcher.utter_message(
+                text=f"Désolé, La page que vous cherchez n'existe pas")
+            return [SlotSet('search_query', key_word)]
         else:
             response_list = page.summary.split('.')
             response = ''
@@ -329,6 +334,22 @@ class ActionBlenderBot(Action):
         return [SlotSet('historics', historics), SlotSet('NEXT_UTTERANCE', NEXT_UTTERANCE)]
 
 
+class ActionSearchYoutube(Action):
+    def name(self) -> Text:
+        return "action_search_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        search_query = tracker.get_slot('search_query')
+
+        videosSearch = VideosSearch(search_query, limit=5)
+        videosResult = await videosSearch.next()
+        for res in videosResult.get("result"):
+            dispatcher.utter_message(text=res.get("title"))
+        return [SlotSet("youtubeResults", videosResult.get("result"))]
+
+
 class ActionOpenYoutube(Action):
     def name(self) -> Text:
         return "action_open_youtube"
@@ -336,16 +357,21 @@ class ActionOpenYoutube(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        url = tracker.get_slot('url')
+        humanIndex = tracker.get_slot('humanIndex')
+        index = humanIndex - 1
+        youtube_results = tracker.get_slot("youtubeResults")
+        if not index < len(youtube_results):
+            dispatcher.utter_message(text="invalid")
+            return []
         dispatcher.utter_message(json_message={
             "action": {
                 "type": "selenium.youtube.open",
                 "payload": {
-                    "url": url
+                    "url": youtube_results[index].get("link")
                 }
             }
         })
-        return [SlotSet("url", None)]
+        return [SlotSet("humanIndex", None)]
 
 
 class ActionCloseYoutube(Action):

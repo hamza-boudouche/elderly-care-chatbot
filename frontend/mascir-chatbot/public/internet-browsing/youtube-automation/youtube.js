@@ -33,6 +33,7 @@ const getYoutubeSearchResults = async (searchQuery) => {
 			}
 		})
 	);
+	driver.close()
 	return filteredSearchResults
 };
 
