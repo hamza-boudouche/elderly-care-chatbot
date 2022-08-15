@@ -90,6 +90,9 @@ nlu:
   examples: |
     - [le premier](index)
     - [le deuxieme](index)
+    - [le troisieme](index) choix
+    - [le quatrieme](index)
+    - [le cinquieme](index)
     - je choisis [le premier](index) choix
     - donnez moi [la troisieme](index)
 
