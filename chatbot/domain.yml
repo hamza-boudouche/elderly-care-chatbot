@@ -1,21 +1,23 @@
 version: "3.1"
 intents:
-  - affirm
-  - bot_challenge
-  - create_event
-  - deny
-  - get_event
-  - goodbye
-  - greet
-  - inform_create
-  - mood_great
-  - stop
-  - wikipedia
+- affirm
+- bot_challenge
+- create_event
+- deny
+- get_event
+- goodbye
+- greet
+- inform_create
+- mood_great
+- stop
+- wikipedia
+- inform_index
 
 entities:
-  - start
-  - end
-  - time
+- start
+- end
+- time
+- ordinal
 
 slots:
   search_query:
@@ -43,20 +45,31 @@ slots:
   start:
     type: any
     mappings:
-      - type: from_entity
-        entity: time
+    - type: from_entity
+      entity: time
+      # conditions:
+      # - active_loop: create_form
   end:
     type: any
     mappings:
-      - type: from_entity
-        entity: time
+    - type: from_entity
+      entity: time
+      # conditions:
+      # - active_loop: create_form
   description:
     type: text
     mappings:
-      - type: from_text
-        conditions:
-          - active_loop: create_form
-            requested_slot: description
+    - type: from_text
+      conditions:
+      - active_loop: create_form
+        requested_slot: description
+  index:
+    type: any
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: ordinal
+
 
 forms:
   create_form:
@@ -77,7 +90,7 @@ responses:
   utter_happy:
     - text: Super, prend soin de toi !
   utter_goodbye:
-    - text: Bye
+  - text: au revoir, prenez soin de vous
   utter_iamabot:
     - text: Je suis un bot, fait par Rasa.
   utter_out_of_scope:
@@ -95,7 +108,9 @@ responses:
   utter_additional:
     - text: Voulez vous des informations supplémentaires à prpos de "{search_query}" ?
   utter_ok:
-    - text: D'accord
+  - text: D'accord
+  utter_position:
+  - text: "voila : {index}"
 
 actions:
   - action_add_event
