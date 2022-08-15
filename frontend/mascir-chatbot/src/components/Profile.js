@@ -13,7 +13,7 @@ const Profile = () => {
 			height: "100%"
 		}} >
 			<div style={{
-				color: "white"
+				color: "black"
 			}}>
 				<img
 					src={user.picture}

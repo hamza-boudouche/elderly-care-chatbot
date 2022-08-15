@@ -1,16 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import botPic from "../assets/bot.png";
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const Message = ({ message: { local, text }, hidden, end }) => {
   const { user } = useAuth0();
   const messageClass = local ? 'sent' : 'received';
   const ref = useRef(null)
-  console.log(user)
 
-  useEffect(() => {
-    console.log(ref.current);
-  }, [ref]);
 
   return (
     <div className={`message ${messageClass} ${hidden ? "hidden" : ""}`} id={end ? "end" : ""} ref={ref}>
@@ -28,9 +26,15 @@ const Message = ({ message: { local, text }, hidden, end }) => {
         />
       </div>
       <div className="message-body">
-        <p>{text}</p>
+        <p>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} >
+            {
+              text
+            }
+          </ReactMarkdown>
+        </p>
       </div>
-    </div>
+    </div >
   );
 };
 

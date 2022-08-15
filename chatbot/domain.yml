@@ -1,4 +1,4 @@
-version: '3.1'
+version: "3.1"
 intents:
 - affirm
 - bot_challenge
@@ -19,30 +19,29 @@ entities:
 - time
 - ordinal
 
-
 slots:
   search_query:
     type: any
     influence_conversation: false
     mappings:
-    - type: custom
+      - type: custom
   historics:
     type: any
     influence_conversation: false
     mappings:
-    - type: custom
+      - type: custom
   NEXT_UTTERANCE:
     type: any
     influence_conversation: false
     mappings:
-    - type: custom
+      - type: custom
   summary:
     type: text
     mappings:
-    - type: from_text
-      conditions:
-      - active_loop: create_form
-        requested_slot: summary
+      - type: from_text
+        conditions:
+          - active_loop: create_form
+            requested_slot: summary
   start:
     type: any
     mappings:
@@ -71,59 +70,57 @@ slots:
     - type: from_entity
       entity: ordinal
 
+
 forms:
   create_form:
     required_slots:
-    - summary
-    - start
-    - end
-    - description
-
+      - summary
+      - start
+      - end
+      - description
 
 responses:
   utter_greet:
-  - text: Bonjour! comment vas-tu?
+    - text: Bonjour! comment vas-tu?
   utter_cheer_up:
-  - text: 'Voila quelque chose pour te rendre heureux:'
-    image: https://i.imgur.com/nGF1K8f.jpg
+    - text: "Voila quelque chose pour te rendre heureux:"
+      image: https://i.imgur.com/nGF1K8f.jpg
   utter_did_that_help:
-  - text: Cela t'a aidé ?
+    - text: Cela t'a aidé ?
   utter_happy:
-  - text: Super, prend soin de toi !
+    - text: Super, prend soin de toi !
   utter_goodbye:
   - text: au revoir, prenez soin de vous
   utter_iamabot:
-  - text: Je suis un bot, fait par Rasa.
+    - text: Je suis un bot, fait par Rasa.
   utter_out_of_scope:
-  - text: Désolé, j ai pas compris
+    - text: Désolé, j ai pas compris
   utter_ask_summary:
-  - text: Quel est le titre de l'evenement ?
+    - text: Quel est le titre de l'evenement ?
   utter_ask_start:
-  - text: Cela pour quelle date ?
+    - text: Cela pour quelle date ?
   utter_ask_end:
-  - text: Quand est ce que cela va terminer ?
+    - text: Quand est ce que cela va terminer ?
   utter_ask_description:
-  - text: Donnez moi une petite description sur cet evenement
+    - text: Donnez moi une petite description sur cet evenement
   utter_cancel_create_form:
-  - text: Création d'événement annulée ...
+    - text: Création d'événement annulée ...
   utter_additional:
-  - text: Voulez vous des informations supplémentaires à prpos de "{search_query}" ?
+    - text: Voulez vous des informations supplémentaires à prpos de "{search_query}" ?
   utter_ok:
   - text: D'accord
   utter_position:
   - text: "voila : {index}"
 
-
 actions:
-- action_add_event
-- action_additional_info
-- action_blenderbot
-- action_get_events_today
-- action_reset_ceate
-- action_wikipedia
-- utter_additional
-- validate_create_form
-
+  - action_add_event
+  - action_additional_info
+  - action_blenderbot
+  - action_get_events_today
+  - action_reset_ceate
+  - action_wikipedia
+  - utter_additional
+  - validate_create_form
 
 session_config:
   session_expiration_time: 60

@@ -67,7 +67,7 @@ ipcMain.on("selenium.close", async (e) => {
 
 ipcMain.on("selenium.youtube.open", async (e, { url }) => {
 	controls?.quit()
-	youtubeControls = await controlYoutubeVideo()
+	youtubeControls = await controlYoutubeVideo(url)
 	controls = {
 		quit: youtubeControls.closeVideo
 	}

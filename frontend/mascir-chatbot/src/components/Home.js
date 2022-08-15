@@ -30,7 +30,7 @@ const Home = () => {
 					paddingLeft: "8rem",
 					paddingRight: "8rem"
 				}}>
-					<Button variant="contained" size='large'><Link to="/chatbot">Start chatting</Link></Button>
+					<Button variant="contained" size='large' className="main-btn"><Link to="/chatbot">Start chatting</Link></Button>
 				</div>
 			</div>
 		</div>

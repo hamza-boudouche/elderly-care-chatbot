@@ -2,6 +2,7 @@ const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
 const path = require('path');
+const fetch = require("node-fetch")
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = path.join(__dirname, '../../token.json');
@@ -68,8 +69,8 @@ async function refreshAccessToken() {
 	const resp = await fetch("https://www.googleapis.com/oauth2/v4/token", {
 		method: "POST",
 		body: JSON.stringify({
-			client_id: credentials.client_id,
-			client_secret: credentials.client_secret,
+			client_id: credentials.web.client_id,
+			client_secret: credentials.web.client_secret,
 			refresh_token: oldToken.refresh_token,
 			grant_type: "refresh_token"
 		}),
@@ -82,6 +83,8 @@ async function refreshAccessToken() {
 		...newTokenData,
 		refresh_token: oldToken.refresh_token
 	}
+	console.log(credentials)
+	console.log(newToken)
 	await fs.promises.writeFile(TOKEN_PATH, JSON.stringify(newToken))
 }
 

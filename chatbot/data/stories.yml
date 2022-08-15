@@ -1,58 +1,65 @@
 version: "3.1"
 
 stories:
+  - story: happy path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_great
+      - action: utter_happy
 
-- story: happy path
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
+  - story: sad path 1
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_unhappy
+      - action: utter_cheer_up
+      - action: utter_did_that_help
+      - intent: affirm
+      - action: utter_happy
+  - story: wikipedia search & additional informations
+    steps:
+      - intent: wikipedia
+      - action: action_wikipedia
+      - action: utter_additional
+      - intent: affirm
+      - action: action_additional_info
 
-- story: wikipedia search & additional informations
-  steps:
-  - intent: wikipedia
-  - action: action_wikipedia
-  - action: utter_additional
-  - intent: affirm
-  - action: action_additional_info
+  - story: wikipedia search & no additional informations
+    steps:
+      - intent: wikipedia
+      - action: action_wikipedia
+      - action: utter_additional
+      - intent: deny
+      - action: utter_ok
 
-- story: wikipedia search & no additional informations
-  steps:
-  - intent: wikipedia
-  - action: action_wikipedia
-  - action: utter_additional
-  - intent: deny
-  - action: utter_ok
+  # - story: User interrupts the create form and doesn't want to continue
+  #   steps:
+  #   - intent: create_event
+  #   - action: create_form
+  #   - active_loop: create_form
+  #   - intent: stop
+  #   - action: utter_cancel_create_form
+  #   - action: action_deactivate_loop
+  #   - active_loop: null
+  #   - action: action_reset_ceate
 
-# - story: User interrupts the create form and doesn't want to continue
-#   steps:
-#   - intent: create_event
-#   - action: create_form
-#   - active_loop: create_form
-#   - intent: stop
-#   - action: utter_cancel_create_form
-#   - action: action_deactivate_loop
-#   - active_loop: null
-#   - action: action_reset_ceate
+  # - story: sad path 1
+  #   steps:
+  #   - intent: greet
+  #   - action: utter_greet
+  #   - intent: mood_unhappy
+  #   - action: utter_cheer_up
+  #   - action: utter_did_that_help
+  #   - intent: affirm
+  #   - action: utter_happy
 
-# - story: sad path 1
-#   steps:
-#   - intent: greet
-#   - action: utter_greet
-#   - intent: mood_unhappy
-#   - action: utter_cheer_up
-#   - action: utter_did_that_help
-#   - intent: affirm
-#   - action: utter_happy
-
-# - story: sad path 2
-#   steps:
-#   - intent: greet
-#   - action: utter_greet
-#   - intent: mood_unhappy
-#   - action: utter_cheer_up
-#   - action: utter_did_that_help
-#   - intent: deny
-#   - action: utter_goodbye
-
+  # - story: sad path 2
+  #   steps:
+  #   - intent: greet
+  #   - action: utter_greet
+  #   - intent: mood_unhappy
+  #   - action: utter_cheer_up
+  #   - action: utter_did_that_help
+  #   - intent: deny
+  #   - action: utter_goodbye
