@@ -47,6 +47,17 @@ app.get('/range/:minDate?/:maxDate?', async (req, res) => {
 	return
 })
 
+app.get('/echo', async (req, res) => {
+	console.log("ping!")
+	res.json({
+		"hello": "world"
+	})
+})
+
+app.post('/reminder', async (req, res) => {
+	console.log(req.body)
+})
+
 app.post('/', async (req, res) => {
 	const {
 		summary,
