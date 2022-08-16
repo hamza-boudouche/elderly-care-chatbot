@@ -9,9 +9,11 @@
     "prod": "node app.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "googleapis": "^39.2.0",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "socket.io": "^4.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.18"

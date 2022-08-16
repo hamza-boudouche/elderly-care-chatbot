@@ -6,6 +6,7 @@ import useMessages from "../hooks/useMessages";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FormMessage from './FormMessage';
 // import { ipcRenderer } from "electron";
+import useReminder from './../hooks/useReminder';
 
 const Chatbot = () => {
   const myMessages = useContext(MessagesContext);
@@ -91,7 +92,8 @@ const Chatbot = () => {
     dummy.current.scrollIntoView({ behavior: "smooth" });
   }, [state.messages])
 
-  const [sendMessageSocket] = useSend(checkReplyMessage);
+  // const [sendMessageSocket] = useSend(checkReplyMessage);
+  useReminder(addReplyMessage);
 
   const sendMessage = (messageValue) => {
     dispatch({
@@ -101,7 +103,7 @@ const Chatbot = () => {
         local: true,
       },
     });
-    sendMessageSocket({ text: messageValue });
+    // sendMessageSocket({ text: messageValue });
     dummy.current.scrollIntoView({ behavior: "smooth" });
   };
 
