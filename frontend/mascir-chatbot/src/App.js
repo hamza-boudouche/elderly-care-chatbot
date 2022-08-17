@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import NavBar from './components/Navbar';
 import Chatbot from './components/Chatbot';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import history from "./utils/history";
 import './style.css';
 import initFontAwesome from "./utils/initFontAwesome";
@@ -24,13 +24,13 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter history={history}>
+    <HashRouter history={history}>
       <NavBar />
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/chatbot" exact element={<Chatbot />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

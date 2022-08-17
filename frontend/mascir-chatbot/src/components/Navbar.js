@@ -14,20 +14,22 @@ import { Link } from "react-router-dom";
 import logo from "../assets/mascir-logo.jpg"
 
 const Navbar = () => {
-  const {
-    user,
-    isAuthenticated,
-    loginWithRedirect,
-    logout,
-  } = useAuth0();
+  // const {
+  //   user,
+  //   isAuthenticated,
+  //   loginWithRedirect,
+  //   logout,
+  // } = useAuth0();
+  const isAuthenticated = true;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const logoutWithRedirect = () =>
-    logout({
-      returnTo: window.location.origin,
-    });
+  const logoutWithRedirect = () => {
+    // logout({
+    //   returnTo: window.location.origin,
+    // });
+  }
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,9 +49,9 @@ const Navbar = () => {
       </div>
       <div className="navlist">
         <ul>
-          {!isAuthenticated && (
+          {/* {!isAuthenticated && (
             <li className="nav-element" onClick={() => loginWithRedirect()}>Login</li>
-          )}
+          )} */}
           {isAuthenticated && (
             <>
               <Tooltip title="Account settings">
@@ -61,8 +63,8 @@ const Navbar = () => {
                   aria-expanded={open ? 'true' : undefined}
                 >
                   <img
-                    src={user.picture || "https://cdn-icons-png.flaticon.com/512/1250/1250689.png"
-                    }
+                    // src={user.picture || "https://cdn-icons-png.flaticon.com/512/1250/1250689.png"}
+                    src="https://cdn-icons-png.flaticon.com/512/1250/1250689.png"
                     alt="Profile"
                     className="nav-user-profile rounded-circle"
                     width="50" style={{

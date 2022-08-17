@@ -4,7 +4,7 @@ const path = require('path')
 const isDev = require('electron-is-dev')
 const { electron } = require('process')
 
-require('@electron/remote/main').initialize()
+// require('@electron/remote/main').initialize()
 
 const { openUrl } = require("./internet-browsing/setup")
 const { controlYoutubeVideo, getYoutubeSearchResults } = require("./internet-browsing/youtube-automation/youtube")
@@ -60,18 +60,18 @@ ipcMain.on("selenium.open", async (e, { url }) => {
 })
 
 ipcMain.on("selenium.close", async (e) => {
-	controls?.quit()
+	controls.quit()
 	controls = undefined
 	youtubeControls = undefined
 })
 
 ipcMain.on("selenium.youtube.search", async (e, { search_query }) => {
-	controls?.quit()
+	controls.quit()
 	await getYoutubeSearchResults(search_query)
 })
 
 ipcMain.on("selenium.youtube.open", async (e, { url }) => {
-	controls?.quit()
+	controls.quit()
 	youtubeControls = await controlYoutubeVideo(url)
 	controls = {
 		quit: youtubeControls.closeVideo
@@ -79,21 +79,21 @@ ipcMain.on("selenium.youtube.open", async (e, { url }) => {
 })
 
 ipcMain.on("selenium.youtube.playPause", async (e) => {
-	await youtubeControls?.playPauseVideo()
+	await youtubeControls.playPauseVideo()
 })
 
 ipcMain.on("selenium.youtube.skipForward", async (e) => {
-	await youtubeControls?.skipForward()
+	await youtubeControls.skipForward()
 })
 
 ipcMain.on("selenium.youtube.skipBackward", async (e) => {
-	await youtubeControls?.skipBackward()
+	await youtubeControls.skipBackward()
 })
 
 ipcMain.on("selenium.youtube.prevVideo", async (e) => {
-	await youtubeControls?.prevVideo()
+	await youtubeControls.prevVideo()
 })
 
 ipcMain.on("selenium.youtube.nextVideo", async (e) => {
-	await youtubeControls?.nextVideo()
+	await youtubeControls.nextVideo()
 })
