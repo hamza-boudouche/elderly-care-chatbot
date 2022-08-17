@@ -62,7 +62,32 @@ rules:
   - intent: get_event
   - action: action_get_events_today
 
-- rule: index ordinal
+# - rule: index ordinal
+#   steps:
+#   - intent: inform_index
+#   - action: utter_position
+
+- rule: Activate youtube form
   steps:
+  - intent: youtube_search
+  - action: search_form
+  - active_loop: search_form
+
+- rule: Submit youtube form
+  condition:
+  # Condition that form is active.
+  - active_loop: search_form
+  steps:
+  # Form is deactivated
+  - action: search_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: action_search_youtube
+  
+- rule: youtube story
+  steps:
+  - action: utter_ask_video_index
   - intent: inform_index
-  - action: utter_position
+  - action: action_open_youtube

@@ -12,6 +12,7 @@ intents:
 - stop
 - wikipedia
 - inform_index
+- youtube_search
 
 entities:
 - start
@@ -20,6 +21,18 @@ entities:
 - ordinal
 
 slots:
+  youtube_query:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: search_form
+          requested_slot: youtube_query
+  youtubeResults:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: custom
   search_query:
     type: any
     influence_conversation: false
@@ -40,22 +53,22 @@ slots:
     mappings:
       - type: from_text
         conditions:
-          - active_loop: create_form
-            requested_slot: summary
+        - active_loop: create_form
+          requested_slot: summary
   start:
     type: any
     mappings:
     - type: from_entity
       entity: time
-      # conditions:
-      # - active_loop: create_form
+      conditions:
+      - active_loop: create_form
   end:
     type: any
     mappings:
     - type: from_entity
       entity: time
-      # conditions:
-      # - active_loop: create_form
+      conditions:
+      - active_loop: create_form
   description:
     type: text
     mappings:
@@ -65,7 +78,7 @@ slots:
         requested_slot: description
   index:
     type: any
-    influence_conversation: false
+    # influence_conversation: false
     mappings:
     - type: from_entity
       entity: ordinal
@@ -78,6 +91,9 @@ forms:
       - start
       - end
       - description
+  search_form:
+    required_slots:
+      - youtube_query
 
 responses:
   utter_greet:
@@ -103,6 +119,10 @@ responses:
     - text: Quand est ce que cela va terminer ?
   utter_ask_description:
     - text: Donnez moi une petite description sur cet evenement
+  utter_ask_youtube_query:
+    - text: Donnez moi le titre de la video
+  utter_ask_video_index:
+    - text: donnez moi l indice de la video que vous souhaitez regarder
   utter_cancel_create_form:
     - text: Création d'événement annulée ...
   utter_additional:
@@ -121,6 +141,8 @@ actions:
   - action_wikipedia
   - utter_additional
   - validate_create_form
+  - action_search_youtube
+  - action_open_youtube
 
 session_config:
   session_expiration_time: 60

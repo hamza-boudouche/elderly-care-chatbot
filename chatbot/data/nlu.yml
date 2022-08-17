@@ -122,3 +122,9 @@ nlu:
     - la liste des evenements s il vous plait
     - quels sont les evenements d aujourd'hui ?
     - je veux jetter un oeil sur la liste des evenements
+
+- intent: youtube_search
+  examples: |
+    - je veux regarder une video
+    - je veux regarder une video sur youtube
+    - ouvrir youtube s il vous plait

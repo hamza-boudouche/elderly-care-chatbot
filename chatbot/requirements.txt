@@ -15,5 +15,6 @@ wikipedia
 wikipedia-api
 nltk
 xmltodict
+youtube-search-python
 transformers==4.20.1
 torch==1.10.2

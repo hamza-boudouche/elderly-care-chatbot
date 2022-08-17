@@ -1,9 +1,10 @@
+from cgitb import text
 import json
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, FollowupAction
 from rasa_sdk.forms import FormValidationAction
 from rasa_sdk.types import DomainDict
 
@@ -19,6 +20,8 @@ from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration
 import nltk
 import wikipedia
 import wikipediaapi
+
+from youtubesearchpython.__future__ import VideosSearch
 
 # BlenderBot model
 mname = "./blenderbot-400M-distill"
@@ -328,6 +331,22 @@ class ActionBlenderBot(Action):
         return [SlotSet('historics', historics), SlotSet('NEXT_UTTERANCE', NEXT_UTTERANCE)]
 
 
+class ActionSearchYoutube(Action):
+    def name(self) -> Text:
+        return "action_search_youtube"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        search_query = tracker.get_slot('youtube_query')
+
+        videosSearch = VideosSearch(search_query, limit=5)
+        videosResult = await videosSearch.next()
+        for res in videosResult.get("result"):
+            dispatcher.utter_message(text=res.get("title"))
+        return [SlotSet("youtubeResults", videosResult.get("result")), SlotSet("youtube_query",None), FollowupAction("utter_ask_video_index")]
+
+
 class ActionOpenYoutube(Action):
     def name(self) -> Text:
         return "action_open_youtube"
@@ -335,16 +354,28 @@ class ActionOpenYoutube(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        url = tracker.get_slot('url')
-        dispatcher.utter_message(json_message={
-            "action": {
-                "type": "selenium.youtube.open",
-                "payload": {
-                    "url": url
+        humanIndex = tracker.get_slot('index')
+        dispatcher.utter_message(text=f"{humanIndex}")
+        if humanIndex is not None:
+            index = humanIndex - 1
+            youtube_results = tracker.get_slot("youtubeResults")
+            if not index < len(youtube_results):
+                dispatcher.utter_message(text="invalid")
+                return []
+            
+            video_launcher = {
+                "action": {
+                    "type": "selenium.youtube.open",
+                    "payload": {
+                        "url": youtube_results[index].get("link")
+                    }
                 }
             }
-        })
-        return [SlotSet("url", None)]
+            video_launcher = json.dumps(video_launcher)
+            dispatcher.utter_message(text = video_launcher)
+        else:
+            return [FollowupAction("utter_ask_video_index")]
+        return [SlotSet("index", None)]
 
 
 class ActionCloseYoutube(Action):

@@ -25,6 +25,8 @@ RUN git clone https://huggingface.co/facebook/blenderbot-400M-distill
 
 COPY ./requirements.txt /tmp/requirements.txt
 
+RUN pip install --upgrade pip
+
 RUN pip install --no-cache-dir --upgrade -r /tmp/requirements.txt
 
 COPY ./actions /app/actions

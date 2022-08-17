@@ -46,6 +46,7 @@ const Chatbot = () => {
 
   const checkReplyMessage = useCallback(
     ({ text, action }) => {
+      window.api.send("message.receive", action)
       if (action === undefined) {
         addReplyMessage({ text })
         console.log("sending message")
