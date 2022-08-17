@@ -1,8 +1,9 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
+const express = require("express")
+const { join } = require("path")
 
 const path = require('path')
 const isDev = require('electron-is-dev')
-const { electron } = require('process')
 
 // require('@electron/remote/main').initialize()
 
@@ -12,6 +13,7 @@ const { Driver } = require('selenium-webdriver/chrome')
 
 let controls = undefined
 let youtubeControls = undefined
+
 
 function createWindow() {
 	// Create the browser window. 
@@ -26,11 +28,19 @@ function createWindow() {
 		}
 	})
 
-	win.loadURL(
-		isDev
-			? 'http://localhost:3000'
-			: `file://${path.join(__dirname, '../build/index.html')}`
-	)
+	// win.loadURL(
+	// 	isDev
+	// 		? 'http://localhost:3000'
+	// 		: `file://${path.join(__dirname, '../build/index.html')}`
+	// )
+	if (!isDev) {
+		const appServer = express();
+		appServer.use(express.static(join(__dirname, '../build')));
+		appServer.listen(3000, function () {
+			console.log('Express server listening on port 3000');
+		});
+	}
+	win.loadURL('http://localhost:3000')
 }
 
 app.on('ready', createWindow)

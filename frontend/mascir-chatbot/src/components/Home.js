@@ -5,9 +5,7 @@ import Button from '@mui/material/Button';
 
 const Home = () => {
 	return (
-		<div className='chatbot no-scroll' style={{
-			// backgroundColor: "red",
-		}}>
+		<div className='chatbot no-scroll' >
 			<div class="two alt-two" style={{
 				paddingTop: '4rem',
 				color: "white"
