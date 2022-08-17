@@ -20,14 +20,16 @@ const Navbar = () => {
     loginWithRedirect,
     logout,
   } = useAuth0();
+  // const isAuthenticated = true;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const logoutWithRedirect = () =>
+  const logoutWithRedirect = () => {
     logout({
       returnTo: window.location.origin,
     });
+  }
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -61,8 +63,8 @@ const Navbar = () => {
                   aria-expanded={open ? 'true' : undefined}
                 >
                   <img
-                    src={user.picture || "https://cdn-icons-png.flaticon.com/512/1250/1250689.png"
-                    }
+                    src={user.picture || "https://cdn-icons-png.flaticon.com/512/1250/1250689.png"}
+                    // src="https://cdn-icons-png.flaticon.com/512/1250/1250689.png"
                     alt="Profile"
                     className="nav-user-profile rounded-circle"
                     width="50" style={{
