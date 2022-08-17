@@ -80,7 +80,7 @@ nlu:
   examples: |
     - pour [aujourd'hui](start)
     - [demain matin](start)
-    - un café dans [15 minutes](start)
+    - apres [15 minutes](start)
     - [15 minutes](start)
     - jusqu' au [demain](end)
     - [samedi soir](end)
@@ -90,6 +90,9 @@ nlu:
   examples: |
     - [le premier](index)
     - [le deuxieme](index)
+    - [le troisieme](index) choix
+    - [le quatrieme](index)
+    - [la cinquieme](index)
     - je choisis [le premier](index) choix
     - donnez moi [la troisieme](index)
 

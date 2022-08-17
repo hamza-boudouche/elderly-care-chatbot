@@ -16,7 +16,7 @@ from actions.utils import actionUpdateEvent
 from actions.utils import actionAdditionalInfo
 
 from deep_translator import GoogleTranslator
-from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration, BlenderbotConfig
+from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration
 import nltk
 import wikipedia
 import wikipediaapi
@@ -25,8 +25,7 @@ from youtubesearchpython.__future__ import VideosSearch
 
 # BlenderBot model
 mname = "./blenderbot-400M-distill"
-model = BlenderbotForConditionalGeneration.from_pretrained(
-    mname, local_files_only=True)
+model = BlenderbotForConditionalGeneration.from_pretrained(mname, local_files_only=True)
 tokenizer = BlenderbotTokenizer.from_pretrained(mname, local_files_only=True)
 
 
