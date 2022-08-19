@@ -30,11 +30,28 @@ function getNewEvents(intervalLength) {
   return events;
 }
 
+function parseDescription(description) {
+  if (description !== "") {
+    const lines = description.split("\n");
+    if (lines[0] === "meeting:" && lines.length > 2) {
+      const meetingData = JSON.parse(lines[1]);
+      lines.splice(0, 2);
+      return {
+        url: meetingData["url"],
+        password: meetingData["password"],
+        description: lines.join("\n"),
+      };
+    }
+  }
+  return {
+    description,
+  };
+}
+
 // send data param (obj) to callback URL in the body of a POST request
 function sendReminder(event) {
   const data = {
     title: event.getTitle(),
-    description: event.getDescription(),
     endTime: event.getEndTime(),
     startTime: event.getStartTime(),
     participants: event.getGuestList((includeOwner = true)).map((guest) => {
@@ -43,6 +60,7 @@ function sendReminder(event) {
         name: guest.getName(),
       };
     }),
+    ...parseDescription(event.getDescription()),
   };
   const payload = JSON.stringify(data);
   const options = {

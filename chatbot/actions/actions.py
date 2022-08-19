@@ -107,7 +107,8 @@ class ActionAddEvent(Action):
         start = tracker.get_slot('start')
         end = tracker.get_slot('end')
         description = tracker.get_slot('description')
-        messages, newEvent = await actionAddEvent(summary, description, start, end)
+        withMeeting = tracker.get_slot('with_meeting')
+        messages, newEvent = await actionAddEvent(summary, description, start, end, withMeeting)
         for message in messages:
             dispatcher.utter_message(text=message.get("text"))
         return [SlotSet("event", newEvent)]

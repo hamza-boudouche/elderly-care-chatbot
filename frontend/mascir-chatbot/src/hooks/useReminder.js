@@ -21,6 +21,10 @@ const useReminder = (callbackMessage) => {
 					text: message
 				});
 			});
+		socket.on('electron.zoom.open', (url) => {
+			console.log(url);
+			window.api.send("electron.zoom.open", url)
+		});
 		console.log("reply callback set")
 	}, [callbackMessage, socket]);
 };

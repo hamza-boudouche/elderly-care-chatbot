@@ -1,8 +1,9 @@
 from datetime import datetime
 import aiohttp
 import asyncio
+from helper import parseDescription
 
-CALENDAR_URL = "http://localhost:3000"
+CALENDAR_URL = "http://localhost:4000"
 
 
 async def actionEventsRange(start, end):
@@ -12,6 +13,11 @@ async def actionEventsRange(start, end):
         async with session.get(f"{CALENDAR_URL}/range/{start}/{end}") as resp:
             res = await resp.json()
             for event in res:
+                info = parseDescription(event["description"])
+                event = {
+                    **event,
+                    **info
+                }
                 event["text"] = f"from {event.get('start').get('dateTime')} to {event.get('end').get('dateTime')} you have {event.get('summary')}"
             return res
 

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, shell } = require('electron')
 const express = require("express")
 const { join } = require("path")
 
@@ -108,4 +108,8 @@ ipcMain.on("selenium.youtube.prevVideo", async (e) => {
 
 ipcMain.on("selenium.youtube.nextVideo", async (e) => {
 	await youtubeControls.nextVideo()
+})
+
+ipcMain.on("electron.zoom.open", async (url) => {
+	shell.openExternal(url)
 })
