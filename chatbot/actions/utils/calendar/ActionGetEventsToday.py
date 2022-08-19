@@ -1,7 +1,9 @@
+import json
 import aiohttp
 import asyncio
+from helper import parseDescription
 
-CALENDAR_URL = "http://localhost:3000"
+CALENDAR_URL = "http://localhost:4000"
 
 
 async def actionEventsToday():
@@ -9,6 +11,9 @@ async def actionEventsToday():
         async with session.get(CALENDAR_URL + "/range") as resp:
             res = await resp.json()
             for event in res:
+                info = parseDescription(event["description"])
+                print(info)
+                event.update(**info)
                 event["text"] = f"from {event.get('start').get('dateTime')} to {event.get('end').get('dateTime')} you have {event.get('summary')}"
             return res
 
@@ -16,5 +21,5 @@ async def actionEventsToday():
 if __name__ == "__main__":
     async def wrapper():
         res = await actionEventsToday()
-        print(res)
+        print(json.dumps(res, indent=4))
     asyncio.run(wrapper())

@@ -33,7 +33,7 @@ async def actionAddEvent(summary, description, start, end, withMeeting):
                 "title": summary
             })
             zoom_res = await zoom_resp.json()
-            payload["description"] = "meeting: " + json.dumps({
+            payload["description"] = "meeting:\n" + json.dumps({
                 "url": zoom_res.get("url"),
                 "password": zoom_res.get("password")
             }) + "\n" + description
