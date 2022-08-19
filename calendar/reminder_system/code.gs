@@ -24,7 +24,7 @@ function getNewEvents(intervalLength) {
   events = events.filter(
     (event) =>
       Math.abs(event.getStartTime() - now) / (1000 * 60) >= intervalLength ||
-      Math.abs(event.getLastUpdated() - now) / (1000 * 60) <= 2
+      Math.abs(event.getLastUpdated() - now) / (1000 * 60) <= 1
   );
   console.log(events.length);
   return events;
