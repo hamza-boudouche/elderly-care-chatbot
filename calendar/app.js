@@ -26,7 +26,7 @@ const io = Server(server, {
 	}
 });
 const sockets = [];
-const remind = (message) => {
+const remind = (channel, message) => {
 	for (let i = 0; i < sockets.length; i++) {
 		sockets[i].emit("reminder", message)
 	}
@@ -76,10 +76,18 @@ app.post('/reminder', async (req, res) => {
 		description,
 		endTime,
 		startTime,
-		participants
+		participants,
+		url,
+		password,
+
 	} = req.body
 	if (remind) {
-		remind(`rappel: vous avez ${title} de ${startTime} a ${endTime}`)
+		if (url) {
+			remind("reminder", `rappel: vous avez ${title} de ${startTime} a ${endTime}, rejoignez la reunion associée ${url} , mot de passe: ${password}`)
+			remind("electron.zoom.open", url)
+		} else {
+			remind("reminder", `rappel: vous avez ${title} de ${startTime} a ${endTime}`)
+		}
 	} else {
 		console.log("no user connected")
 	}
