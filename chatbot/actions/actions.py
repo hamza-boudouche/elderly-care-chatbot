@@ -1,3 +1,4 @@
+import json
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
@@ -26,6 +27,21 @@ mname = "./blenderbot-400M-distill"
 model = BlenderbotForConditionalGeneration.from_pretrained(
     mname, local_files_only=True)
 tokenizer = BlenderbotTokenizer.from_pretrained(mname, local_files_only=True)
+
+
+class ActionSessionStart(Action):
+    def name(self) -> Text:
+        return "action_session_start"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(
+            text="Voici les événements que vous avez pour les prochaines 24 heures")
+        events = await actionEventsToday()
+        for event in events:
+            dispatcher.utter_message(text=event.get("text"))
+        return [SlotSet("events", events)]
 
 
 class ActionEventsToday(Action):
@@ -362,14 +378,15 @@ class ActionOpenYoutube(Action):
         if not index < len(youtube_results):
             dispatcher.utter_message(text="invalid")
             return []
-        dispatcher.utter_message(json_message={
+        reply = {
             "action": {
                 "type": "selenium.youtube.open",
                 "payload": {
                     "url": youtube_results[index].get("link")
                 }
             }
-        })
+        }
+        dispatcher.utter_message(text=json.dumps(reply))
         return [SlotSet("humanIndex", None)]
 
 
@@ -380,11 +397,12 @@ class ActionCloseYoutube(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(json_message={
+        reply = {
             "action": {
                 "type": "selenium.youtube.close"
             }
-        })
+        }
+        dispatcher.utter_message(text=json.dumps(reply))
         return []
 
 
@@ -395,11 +413,12 @@ class ActionPlayPauseYoutube(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(json_message={
+        reply = {
             "action": {
                 "type": "selenium.youtube.playPause"
             }
-        })
+        }
+        dispatcher.utter_message(text=json.dumps(reply))
         return []
 
 
@@ -410,11 +429,12 @@ class ActionSkipForwardYoutube(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(json_message={
+        reply = {
             "action": {
                 "type": "selenium.youtube.skipForward"
             }
-        })
+        }
+        dispatcher.utter_message(text=json.dumps(reply))
         return []
 
 
@@ -425,11 +445,12 @@ class ActionSkipBackwardYoutube(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(json_message={
+        reply = {
             "action": {
                 "type": "selenium.youtube.skipBackward"
             }
-        })
+        }
+        dispatcher.utter_message(text=json.dumps(reply))
         return []
 
 
@@ -440,11 +461,12 @@ class ActionPrevVideoYoutube(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(json_message={
+        reply = {
             "action": {
                 "type": "selenium.youtube.prevVideo"
             }
-        })
+        }
+        dispatcher.utter_message(text=json.dumps(reply))
         return []
 
 
@@ -455,9 +477,10 @@ class ActionNextVideoYoutube(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(json_message={
+        reply = {
             "action": {
                 "type": "selenium.youtube.nextVideo"
             }
-        })
+        }
+        dispatcher.utter_message(text=json.dumps(reply))
         return []

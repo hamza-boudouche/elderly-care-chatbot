@@ -46,12 +46,10 @@ const Chatbot = () => {
   );
 
   const checkReplyMessage = useCallback(
-    ({ text, custom }) => {
-      if (custom === undefined) {
-        addReplyMessage({ text })
-        console.log("sending message")
-        window.api.send("message.receive", text)
-      } else {
+    ({ text }) => {
+      let custom;
+      try {
+        custom = JSON.parse(text)
         window.api.send("message.receive", `action type: ${custom.action.type}`)
         switch (custom.action.type) {
           case "selenium.open":
@@ -82,9 +80,12 @@ const Chatbot = () => {
             window.api.send("selenium.youtube.nextVideo", custom.action.payload)
             break;
           default:
-            console.log("unsupported action type")
+            window.api.send("message.receive", "unsupported action type")
             break;
         }
+      } catch (error) {
+        addReplyMessage({ text })
+        window.api.send("message.receive", text)
       }
     }, [addReplyMessage]
   );
