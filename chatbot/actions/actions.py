@@ -28,6 +28,21 @@ model = BlenderbotForConditionalGeneration.from_pretrained(
 tokenizer = BlenderbotTokenizer.from_pretrained(mname, local_files_only=True)
 
 
+class ActionSessionStart(Action):
+    def name(self) -> Text:
+        return "action_session_start"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(
+            text="Voici les événements que vous avez pour les prochaines 24 heures")
+        events = await actionEventsToday()
+        for event in events:
+            dispatcher.utter_message(text=event.get("text"))
+        return [SlotSet("events", events)]
+
+
 class ActionEventsToday(Action):
 
     def name(self) -> Text:
