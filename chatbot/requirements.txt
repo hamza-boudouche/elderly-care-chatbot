@@ -17,3 +17,4 @@ nltk
 xmltodict
 transformers==4.20.1
 torch==1.10.2
+python-dateutil

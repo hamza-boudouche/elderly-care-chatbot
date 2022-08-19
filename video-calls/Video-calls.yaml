@@ -39,3 +39,16 @@ components:
           type: string
           description: password to join the meeting
           format: password
+    newMeetingData:
+      type: object
+      properties:
+        time:
+          type: string
+          description: start time of the meeting
+          format: datetime
+        duration:
+          type: integer
+          description: duration of the meeting in minutes
+        title:
+          type: string
+          description: title of the meeting
