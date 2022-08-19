@@ -20,6 +20,8 @@ function createWindow() {
 	const win = new BrowserWindow({
 		width: 700,
 		height: 800,
+		title: "Robot Assistant Medical",
+		icon: path.join(__dirname, "./assets/bot.png"),
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: true,

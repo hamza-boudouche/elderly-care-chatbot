@@ -7,16 +7,7 @@ stories:
       - action: utter_greet
       - intent: mood_great
       - action: utter_happy
-
-  - story: sad path 1
-    steps:
-      - intent: greet
-      - action: utter_greet
-      - intent: mood_unhappy
-      - action: utter_cheer_up
-      - action: utter_did_that_help
-      - intent: affirm
-      - action: utter_happy
+  
   - story: wikipedia search & additional informations
     steps:
       - intent: wikipedia

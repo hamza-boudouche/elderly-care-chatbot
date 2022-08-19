@@ -1,5 +1,3 @@
-from cgitb import text
-import json
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
@@ -16,7 +14,7 @@ from actions.utils import actionUpdateEvent
 from actions.utils import actionAdditionalInfo
 
 from deep_translator import GoogleTranslator
-from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration, BlenderbotConfig
+from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration
 import nltk
 import wikipedia
 import wikipediaapi

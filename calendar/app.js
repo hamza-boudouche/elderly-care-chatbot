@@ -41,6 +41,7 @@ io.on("connection", (socket) => {
 (async () => {
 	console.log("testing")
 	creds = await credentials("./credentials.json")
+	// oAuth2Client = await authorize(creds)
 	while (true) {
 		try {
 			oAuth2Client = await authorize(creds)
@@ -82,8 +83,6 @@ app.post('/reminder', async (req, res) => {
 	} else {
 		console.log("no user connected")
 	}
-	// remind(req.body)
-	// console.log(events[i].getTitle(), events[i].getDescription(), events[i].getEndTime(), events[i].getStartTime())
 	res.json({
 		ok: true
 	})

@@ -1,7 +1,7 @@
 {
   "name": "calendar-microservice",
   "version": "1.0.0",
-  "description": "",
+  "description": "calendar microservice",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,6 +18,19 @@
   "devDependencies": {
     "nodemon": "^2.0.18"
   },
-  "author": "",
+  "author": {
+    "name": "Hamza BOUDOUCHE - Saad BERRISSOUL"
+  },
+  "contributors": [
+    {
+      "email": "boudouche.hamza.11@gmail.com",
+      "name": "Hamza BOUDOUCHE",
+      "url": "https://hboudouche.netlify.app"
+    },
+    {
+      "email": "saadberrissoul@gmail.com",
+      "name": "Saad BERRISSOUL"
+    }
+  ],
   "license": "ISC"
 }
