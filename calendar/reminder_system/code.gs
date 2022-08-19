@@ -1,8 +1,8 @@
 const calendarID = "boudouchehamza2@gmail.com"; // id of the calendar used to store system events
-const callbackURL = "https://cd7f-196-200-149-100.ngrok.io/reminder"; // url of the calendar microservice
+const callbackURL = "https://b020-196-200-149-100.ngrok.io/reminder"; // url of the calendar microservice
 const intervalLength = 30; // in minutes
 const now = new Date();
-
+// 2 rappels 30 mins et 5 mins
 // get all events in time interval (between start and end)
 function getEvents(
   start = new Date(now.getTime() + intervalLength * 60 * 1000),

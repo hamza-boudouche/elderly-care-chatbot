@@ -5,10 +5,19 @@
   "main": "public/electron.js",
   "homepage": "./",
   "author": {
-    "email": "boudouche.hamza.11@gmail.com",
-    "name": "Hamza BOUDOUCHE",
-    "url": "https://hboudouche.netlify.app"
+    "name": "Hamza BOUDOUCHE - Saad BERRISSOUL"
   },
+  "contributors": [
+    {
+      "email": "boudouche.hamza.11@gmail.com",
+      "name": "Hamza BOUDOUCHE",
+      "url": "https://hboudouche.netlify.app"
+    },
+    {
+      "email": "saadberrissoul@gmail.com",
+      "name": "Saad BERRISSOUL"
+    }
+  ],
   "description": "Elderly care chatbot",
   "dependencies": {
     "@auth0/auth0-react": "^1.10.2",

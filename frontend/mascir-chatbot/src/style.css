@@ -219,6 +219,7 @@ table th:first-child {
 
 .form-btn {
   color: silver;
+  cursor: pointer;
 }
 
 .voice-btn,

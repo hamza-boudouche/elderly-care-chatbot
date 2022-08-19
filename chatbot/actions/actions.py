@@ -1,5 +1,3 @@
-from cgitb import text
-import json
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
@@ -25,7 +23,8 @@ from youtubesearchpython.__future__ import VideosSearch
 
 # BlenderBot model
 mname = "./blenderbot-400M-distill"
-model = BlenderbotForConditionalGeneration.from_pretrained(mname, local_files_only=True)
+model = BlenderbotForConditionalGeneration.from_pretrained(
+    mname, local_files_only=True)
 tokenizer = BlenderbotTokenizer.from_pretrained(mname, local_files_only=True)
 
 
