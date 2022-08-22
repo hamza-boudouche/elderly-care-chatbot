@@ -1,4 +1,5 @@
 const express = require('express')
+const fetch = require("node-fetch")
 const Server = require("socket.io")
 const http = require('http');
 const app = express()
@@ -17,6 +18,8 @@ const {
 	getEvent
 } = require("./utils/CRUD/calendarCrud")
 
+const DOMAIN = "dev--r9nce6d.us.auth0.com"
+
 let creds;
 let oAuth2Client;
 const io = Server(server, {
@@ -25,16 +28,40 @@ const io = Server(server, {
 		methods: ["GET", "POST"]
 	}
 });
-const sockets = [];
-const remind = (channel, message) => {
-	for (let i = 0; i < sockets.length; i++) {
-		sockets[i].emit("reminder", message)
+const sockets = {};
+const remind = (user, channel, message) => {
+	if (user in sockets) {
+		for (let socket in sockets[user]) {
+			socket.emit(channel, message)
+		}
 	}
 }
 
+io.use(async (socket, next) => {
+	if (socket.handshake.query && socket.handshake.query.token) {
+		const res = await fetch(`https://${DOMAIN}/userinfo`, {
+			headers: { 'Authorization': `Bearer ${socket.handshake.query.token}` },
+		})
+		if (res.status === 401) {
+			next(new Error('Authentication error'));
+		}
+		const data = await res.json()
+		socket.email = data.email
+		next()
+	}
+	else {
+		next(new Error('Authentication error'));
+	}
+})
+
 io.on("connection", (socket) => {
+	console.log(`user connected: ${socket.email}`)
 	socket.on("ready", () => {
-		sockets.push(socket)
+		if (socket.email in sockets) {
+			sockets[socket.email].push(socket)
+		} else {
+			sockets[socket.email] = [socket]
+		}
 	});
 });
 
@@ -79,14 +106,15 @@ app.post('/reminder', async (req, res) => {
 		participants,
 		url,
 		password,
-
 	} = req.body
 	if (remind) {
-		if (url) {
-			remind("reminder", `rappel: vous avez ${title} de ${startTime} a ${endTime}, rejoignez la reunion associée ${url} , mot de passe: ${password}`)
-			remind("electron.zoom.open", url)
-		} else {
-			remind("reminder", `rappel: vous avez ${title} de ${startTime} a ${endTime}`)
+		for (let participant in participants) {
+			if (url) {
+				remind(participant.email, "reminder", `rappel: vous avez ${title} de ${startTime} a ${endTime}, rejoignez la reunion associée ${url} , mot de passe: ${password}`)
+				remind(participant.email, "electron.zoom.open", url)
+			} else {
+				remind(participant.email, "reminder", `rappel: vous avez ${title} de ${startTime} a ${endTime}`)
+			}
 		}
 	} else {
 		console.log("no user connected")

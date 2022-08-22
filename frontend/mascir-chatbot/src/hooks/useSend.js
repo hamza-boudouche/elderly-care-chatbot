@@ -5,12 +5,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 const useSend = (callbackMessage) => {
   const url = 'http://localhost:5005';
   const [socket, setSocket] = useState();
-  // const { user, getAccessTokenSilently, loginWithRedirect } = useAuth0();
-  const user = {
-    email: "boudouchehamza2@gmail.com"
-  }
+  const { user, getAccessTokenSilently, loginWithRedirect } = useAuth0();
+  // const user = {
+  //   email: "boudouchehamza2@gmail.com"
+  // }
 
-  const loginWithRedirect = () => { }
+  // const loginWithRedirect = () => { }
 
   useEffect(() => {
     setSocket(
