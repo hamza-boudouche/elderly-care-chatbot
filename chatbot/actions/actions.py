@@ -1,5 +1,6 @@
 import json
 from typing import Any, Text, Dict, List
+import aiohttp
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
@@ -27,6 +28,7 @@ mname = "./blenderbot-400M-distill"
 model = BlenderbotForConditionalGeneration.from_pretrained(
     mname, local_files_only=True)
 tokenizer = BlenderbotTokenizer.from_pretrained(mname, local_files_only=True)
+DOMAIN = "dev--r9nce6d.us.auth0.com"
 
 
 class ActionSessionStart(Action):
@@ -42,6 +44,27 @@ class ActionSessionStart(Action):
         for event in events:
             dispatcher.utter_message(text=event.get("text"))
         return [SlotSet("events", events)]
+
+
+class ActionAuthenticateUser(Action):
+    def name(self) -> Text:
+        return "action_authenticate_user"
+
+    async def run(self, dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        last_message = tracker.latest_message.text
+        token = last_message.split(" ")
+        if token[0] == "token":
+            async with aiohttp.ClientSession() as session:
+                res = await session.get(url=f"{DOMAIN}/userinfo", headers={
+                    "Authorization": f"Bearer {token[1]}"
+                })
+                if res.status != 401:
+                    data = await res.json()
+                    return [SlotSet("email", data.email)]
+        # implement logic to redirect user to authenticate before the first message (dispatch a json message with action = "auth.login.redirect")
+        return []
 
 
 class ActionEventsToday(Action):
