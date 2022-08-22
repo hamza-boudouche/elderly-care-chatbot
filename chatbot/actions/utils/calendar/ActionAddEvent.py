@@ -2,7 +2,7 @@ from cgitb import text
 import aiohttp
 import asyncio
 
-CALENDAR_URL = "http://localhost:3000"
+CALENDAR_URL = "http://calendar:4000"
 
 
 async def actionAddEvent(summary, description, start, end):

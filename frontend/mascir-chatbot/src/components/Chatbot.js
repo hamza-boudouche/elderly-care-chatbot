@@ -45,40 +45,40 @@ const Chatbot = () => {
   );
 
   const checkReplyMessage = useCallback(
-    ({ text, action }) => {
-      window.api.send("message.receive", action)
-      if (action === undefined) {
-        addReplyMessage({ text })
+    (message) => {
+        window.api.send("message.receive", message)
+      if (message.custom?.action === undefined) {
+        addReplyMessage({ text: message.text })
         console.log("sending message")
-        window.api.send("message.receive", text)
+        window.api.send("message.receive", message.text)
       } else {
-        switch (action.type) {
+        switch (message.custom?.action.type) {
           case "selenium.open":
-            window.api.send("selenium.open", action.payload)
+            window.api.send("selenium.open", message.custom?.action.payload)
             break;
           case "selenium.close":
-            window.api.send("selenium.close", action.payload)
+            window.api.send("selenium.close", message.custom?.action.payload)
             break;
           case "selenium.youtube.close":
-            window.api.send("selenium.youtube.close", action.payload)
+            window.api.send("selenium.youtube.close", message.custom?.action.payload)
             break;
           case "selenium.youtube.open":
-            window.api.send("selenium.youtube.open", action.payload)
+            window.api.send("selenium.youtube.open", message.custom?.action.payload)
             break;
           case "selenium.youtube.playPause":
-            window.api.send("selenium.youtube.playPause", action.payload)
+            window.api.send("selenium.youtube.playPause", message.custom?.action.payload)
             break;
           case "selenium.youtube.skipForward":
-            window.api.send("selenium.youtube.skipForward", action.payload)
+            window.api.send("selenium.youtube.skipForward", message.custom?.action.payload)
             break;
           case "selenium.youtube.skipBackward":
-            window.api.send("selenium.youtube.skipBackward", action.payload)
+            window.api.send("selenium.youtube.skipBackward", message.custom?.action.payload)
             break;
           case "selenium.youtube.prevVideo":
-            window.api.send("selenium.youtube.prevVideo", action.payload)
+            window.api.send("selenium.youtube.prevVideo", message.custom?.action.payload)
             break;
           case "selenium.youtube.nextVideo":
-            window.api.send("selenium.youtube.nextVideo", action.payload)
+            window.api.send("selenium.youtube.nextVideo", message.custom?.action.payload)
             break;
           default:
             console.log("unsupported action type")

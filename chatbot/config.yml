@@ -52,8 +52,11 @@ pipeline:
   - name: EntitySynonymMapper
   - name: ResponseSelector
     epochs: 100
+  - name: ResponseSelector
+    epochs: 100
+    retrieval_intent: chitchat
   - name: FallbackClassifier
-    threshold: 0.8
+    threshold: 0.85
     # ambiguity_threshold: 0.1
   - name: "DucklingEntityExtractor"
     # url of the running duckling server

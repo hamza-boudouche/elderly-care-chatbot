@@ -60,3 +60,12 @@ stories:
   #     - action: utter_ask_video_index
   #     - intent: inform_index
   #     - action: action_open_youtube
+
+  # - story: start conversation and do some chitchat
+  #   steps:
+  #   - intent: chitchat
+  #   - action: utter_chitchat
+  #   - intent: chitchat
+  #   - action: utter_chitchat
+  #   - intent: nlu_fallback
+  #   - action: action_blenderbot

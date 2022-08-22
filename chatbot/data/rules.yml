@@ -38,7 +38,7 @@ rules:
   - slot_was_set:
     - requested_slot: null
   # The actions we want to run when the form is submitted.
-  # - action: action_add_event
+  - action: action_add_event
   - action: action_reset_ceate
 
 - rule: interrupt create event form
@@ -91,3 +91,8 @@ rules:
   - action: utter_ask_video_index
   - intent: inform_index
   - action: action_open_youtube
+
+- rule: chitchat
+  steps:
+  - intent: chitchat
+  - action: utter_chitchat

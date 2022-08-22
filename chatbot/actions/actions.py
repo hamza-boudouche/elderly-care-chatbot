@@ -21,13 +21,20 @@ import nltk
 import wikipedia
 import wikipediaapi
 
+import os
+from pathlib import Path
+import flair
+from flair.data import Sentence
+from flair.models import SequenceTagger
+
 from youtubesearchpython.__future__ import VideosSearch
 
-# BlenderBot model
-mname = "./blenderbot-400M-distill"
-model = BlenderbotForConditionalGeneration.from_pretrained(mname, local_files_only=True)
-tokenizer = BlenderbotTokenizer.from_pretrained(mname, local_files_only=True)
+#POS-french
+# model_2 = SequenceTagger.load('./pos-french/pytorch_model.bin')
 
+# BlenderBot model
+model = BlenderbotForConditionalGeneration.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
+tokenizer = BlenderbotTokenizer.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
 
 class ActionEventsToday(Action):
 
@@ -229,29 +236,34 @@ class ActionWikipedia(Action):
 
         # translate user question to english :
         text = tracker.latest_message['text']
-        translated_text = GoogleTranslator(
-            source='fr', target='en').translate(text)
 
         # POS tagging :
-        preprocessed_text = nltk.word_tokenize(translated_text.lower())
-        pos_val = nltk.pos_tag(preprocessed_text, tagset='universal')
+        sentence = Sentence(text)
+        model_2.predict(sentence)
+        sentence.to_tagged_string()
+
+        pos_val = []
+        for token in list(sentence):
+            pos_val.append((token.form, token.tag))
 
         # delete indesirable words and construct the keyword
-        to_delete = ['ADV', 'CONJ', 'PRT', 'PRON', 'VERB', '.',  'X']
-        key_word = ''
+        to_keep = ['PREP', 'PROPN', 'XFAMIL', 'NUM', 'PPOBJMS', 'PPOBJFS', 'VPPMS', 'VPPMP', 'VPPFS', 'VPPFP', 'DET', 'DETMS', 'DETFS', 'ADJ', 'ADJMS', 'ADJMP', 'ADJFS', 'ADJFP', 'NOUN','NMS','NMP','NFS','NFP','CHIF','MOTINC','X']
+        keyword = ''
         for tk in pos_val:
-            if tk[0] in ['information', 'informations', 'about', 'wich']:
+            if tk[0] in ['des','information','informations','sur']:
                 pass
             else:
-                if tk[1] not in to_delete:
-                    key_word += tk[0] + ' '
+                if tk[1] in to_keep:
+                    keyword += tk[0] + ' '
 
         # search in wikipedia
-        results = wikipedia.search(key_word, results=10, suggestion=False)
+        results = wikipedia.search(keyword, results=10, suggestion=False)
+
         if len(results) == 0:
             dispatcher.utter_message(text=f"Désolé, Aucun résultat correspond à votre recherche")
-            return [SlotSet('search_query',key_word)]
-        wiki = wikipediaapi.Wikipedia('en')
+            return [SlotSet('search_query',keyword)]
+        
+        wiki = wikipediaapi.Wikipedia('fr')
         exists = False
         for i in range(len(results)):
             page = wiki.page(results[i])
@@ -262,7 +274,7 @@ class ActionWikipedia(Action):
         # Display the answer
         if exists == False:
             dispatcher.utter_message(text=f"Désolé, La page que vous cherchez n'existe pas")
-            return [SlotSet('search_query',key_word)]
+            return [SlotSet('search_query',keyword)]
         else:
             response_list = page.summary.split('.')
             response = ''
@@ -271,16 +283,12 @@ class ActionWikipedia(Action):
                 for sent in response_list[:2]:
                     response += sent+'.'
                 response = clean(response)
-                translated_response = GoogleTranslator(
-                    source='en', target='fr').translate(response)
-                dispatcher.utter_message(text=f"{translated_response}")
+                dispatcher.utter_message(text=f"{response}")
             else:
                 response = response_list[0]+'.'
                 response = clean(response)
-                translated_response = GoogleTranslator(
-                    source='en', target='fr').translate(response)
-                dispatcher.utter_message(text=f"{translated_response}")
-            return [SlotSet("search_query", key_word)]
+                dispatcher.utter_message(text=f"{response}")
+            return [SlotSet("search_query", keyword)]
 
 
 class ActionBlenderBot(Action):
@@ -355,7 +363,7 @@ class ActionOpenYoutube(Action):
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         humanIndex = tracker.get_slot('index')
-        dispatcher.utter_message(text=f"{humanIndex}")
+        # dispatcher.utter_message(text=f"{humanIndex}")
         if humanIndex is not None:
             index = humanIndex - 1
             youtube_results = tracker.get_slot("youtubeResults")

@@ -21,7 +21,7 @@ const Home = () => {
 					marginTop: "100px",
 					textAlign: "justify"
 				}}><p>
-						Lorem ipsum dolor sit amet. Eum odit minus a assumenda rerum est voluptatem minus est nihil maxime et accusantium consequatur qui dolorum asperiores. Aut dolor dolores ut quis commodi et accusamus deleniti qui optio internos est necessitatibus recusandae eum delectus voluptatibus. Et ipsam odio ea aliquid debitis 33 galisum repellendus vel beatae amet. Quo ducimus natus est repellat vero quo recusandae nostrum vel odio excepturi suscipit veniam.
+						elderly care chatbot, est AI assistant, dédié a prendre soin des personnes âgées et interagir avec eux, dans une maison de retraite, doté de plusieurs fonctionnalités que vous allez découvrir tout de suite.
 					</p>
 				</div>
 				<div style={{
