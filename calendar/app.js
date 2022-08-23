@@ -12,6 +12,7 @@ const {
 } = require("./utils/auth/authClient")
 const {
 	listEvents,
+	listEventsByAttendee,
 	deleteEvent,
 	addEvent,
 	updateEvent,
@@ -87,9 +88,11 @@ app.get('/single/:eventId', async (req, res) => {
 })
 
 app.get('/range/:minDate?/:maxDate?', async (req, res) => {
-	let { minDate, maxDate } = req.params
-	res.json(await listEvents(
+	const email = req.headers["X-mascir-chatbot-email"]
+	const { minDate, maxDate } = req.params
+	res.json(await listEventsByAttendee(
 		oAuth2Client,
+		email,
 		minDate,
 		maxDate
 	))
@@ -97,6 +100,8 @@ app.get('/range/:minDate?/:maxDate?', async (req, res) => {
 })
 
 app.post('/reminder', async (req, res) => {
+	// TODO: secure this endpoint (by a jtw token generated for the party allowed to send reminders to users (must be coming from a domain name owned by google))
+	console.log(req.headers)
 	console.log(req.body)
 	const {
 		title,
