@@ -12,6 +12,8 @@ intents:
 - stop
 - wikipedia
 - inform_index
+- youtube_search
+- chitchat
 
 entities:
 - start
@@ -20,6 +22,28 @@ entities:
 - ordinal
 
 slots:
+  event:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: custom
+  events:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: custom
+  youtube_query:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: search_form
+          requested_slot: youtube_query
+  youtubeResults:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: custom
   search_query:
     type: any
     influence_conversation: false
@@ -40,22 +64,22 @@ slots:
     mappings:
       - type: from_text
         conditions:
-          - active_loop: create_form
-            requested_slot: summary
+        - active_loop: create_form
+          requested_slot: summary
   start:
     type: any
     mappings:
     - type: from_entity
       entity: time
-      # conditions:
-      # - active_loop: create_form
+      conditions:
+      - active_loop: create_form
   end:
     type: any
     mappings:
     - type: from_entity
       entity: time
-      # conditions:
-      # - active_loop: create_form
+      conditions:
+      - active_loop: create_form
   description:
     type: text
     mappings:
@@ -65,7 +89,7 @@ slots:
         requested_slot: description
   index:
     type: any
-    influence_conversation: false
+    # influence_conversation: false
     mappings:
     - type: from_entity
       entity: ordinal
@@ -78,10 +102,13 @@ forms:
       - start
       - end
       - description
+  search_form:
+    required_slots:
+      - youtube_query
 
 responses:
   utter_greet:
-    - text: Bonjour! comment vas-tu ?
+    - text: Bonjour! j' espere que vous allez bien.
   utter_cheer_up:
     - text: "Voila quelque chose pour te rendre heureux:"
       image: https://i.imgur.com/nGF1K8f.jpg
@@ -103,6 +130,10 @@ responses:
     - text: Quand est ce que cela va terminer ?
   utter_ask_description:
     - text: Donnez moi une petite description sur cet evenement
+  utter_ask_youtube_query:
+    - text: Donnez moi le titre de la video
+  utter_ask_video_index:
+    - text: donnez moi l indice de la video que vous souhaitez regarder
   utter_cancel_create_form:
     - text: Création d'événement annulée ...
   utter_additional:
@@ -112,6 +143,36 @@ responses:
   utter_position:
   - text: "voila : {index}"
 
+  utter_chitchat/ask_mood:
+  - text: Je vais bien, merci ! Comment puis-je vous aider?
+  - text: Je vais très bien, merci ! Comment puis-je vous aider?
+  - text: je me sens bien, merci ! Comment puis-je vous aider?
+  utter_chitchat/ask_howbuilt:
+  - text: J'ai été construit avec beaucoup d'amour et de patience.
+  - text: Ils me demandent toujours comment j'ai été construit, mais jamais comment je suis...
+  - text: j'ai été créé par des ingénieurs en logiciel, mais c'est le travail acharné qui m'a construit.
+  utter_chitchat/ask_howold:
+  - text: Assez vieux pour être un bot !
+  - text: L'âge n'est qu'une question d'esprit sur la matière. Si cela ne vous dérange pas, ce n'est pas grave.
+  - text: Croyez moi, j ai meme pas un an.
+  utter_chitchat/ask_isbot:
+  - text: Oui, je suis un bot.
+  - text: oui, vous l'avez deviné, je suis un bot !
+  utter_chitchat/ask_ishuman:
+  - text: je suis pas un humain, je suis un bot !
+  utter_chitchat/ask_languagesbot:
+  - text: je peux dire baguette en anglais, mais malheureusement le francais est la seule langue avec laquelle je peux vous répondre.
+  - text: Code binaire et langage de l'amour, et francais bien sur.
+  - text: j'ai été écrit en Python, mais pour votre commodité, je vais traduire en francais.
+  utter_chitchat/ask_time:
+  - text: C'est la période la plus merveilleuse de l'année !
+  - text: C'est la fête !
+  - text: Le temps est une construction humaine, il faudra me le dire.
+  - text: C'est difficile à repondre, c'est différent partout dans le monde !
+  utter_chitchat/ask_whatismyname:
+  - text: C'est probablement celui que tes parents ont choisi pour toi.
+  - text: je vous le dirais, mais l'accès à cette partie de la mémoire est restreint.
+  
 actions:
   - action_add_event
   - action_additional_info
@@ -121,7 +182,9 @@ actions:
   - action_wikipedia
   - utter_additional
   - validate_create_form
+  - action_search_youtube
+  - action_open_youtube
 
 session_config:
-  session_expiration_time: 60
+  session_expiration_time: 5
   carry_over_slots_to_new_session: true

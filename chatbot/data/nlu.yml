@@ -122,3 +122,78 @@ nlu:
     - la liste des evenements s il vous plait
     - quels sont les evenements d aujourd'hui ?
     - je veux jetter un oeil sur la liste des evenements
+
+- intent: youtube_search
+  examples: |
+    - je veux regarder une video
+    - je veux regarder une video sur youtube
+    - ouvrir youtube s il vous plait
+    - je veux utiliser youtube
+
+- intent: chitchat/ask_mood
+  examples: |
+    - ça va ?
+    - comment vas-tu?
+    - quelle est votre mood aujourd'hui
+    - comment tu te sens maintenant ?
+
+- intent: chitchat/ask_howbuilt
+  examples: |
+    - Pouvez-vous me donner une idée de la façon dont vous avez été créé ?
+    - Comment vous ont ils créé ?
+    - Je veux savoir comment tu as été formé
+    - Êtes-vous construit avec rasa ?
+    - Êtes-vous développé en rasa
+    - Comment vous etes construit ?
+
+- intent: chitchat/ask_howold
+  examples: |
+    - Quel age as tu ?
+    - Dites moi votre jour, mois et année de naissance.
+    - Quelle est votre date de naissance ?
+    - Quand es-tu né ?
+    - Quel age as tu
+
+- intent: chitchat/ask_isbot
+  examples: |
+    - etes-vous un bot ?
+    - Etes-vous un robot
+    - etes-vous un bot rasa ?
+    - etes-vous un vrai bot ?
+    - etes-vous un robot
+    
+- intent: chitchat/ask_ishuman
+  examples: |
+    - salut tu es humain
+    - es tu un humain
+    - tu es réel ?
+    - es tu une personne réelle
+    - tu es bot ou humain ?
+
+- intent: chitchat/ask_languagesbot
+  examples: |
+    - etes-vous familier avec plus d une langue ?
+    - Pouvez-vous communiquer avec d'autres langues ?
+    - parlez vous plus d'une langue ?
+    - connaissez vous d'autres langues ?
+    - Parlez-vous d'autres langues?
+
+- intent: chitchat/ask_time
+  examples: |
+    - peux tu m indiquer l heure?
+    - pouvez vous me dire quelle heure il est ?
+    - quelle heure est-il ?
+    - quelle est l'heure exacte ?
+    - quelle heure est-il s'il vous plaît
+
+- intent: chitchat/ask_whatismyname
+  examples: |
+    - Pouvez-vous me dire mon nom ?
+    - Pouvez-vous me dire comment je m'appelle ?
+    - S'il vous plaît laissez-moi savoir comment je m'appelle
+    - Dis mon nom
+    - Quel est mon nom exactement ?
+    - Quel est mon prénom ?
+    - Quel est mon nom?
+    - Vous connaissez mon nom ?
+

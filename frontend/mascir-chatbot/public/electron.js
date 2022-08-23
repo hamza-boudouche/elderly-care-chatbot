@@ -62,8 +62,8 @@ app.on('activate', function () {
 	if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 
-ipcMain.on("message.receive", async (e, { text }) => {
-	console.log("message was received", text)
+ipcMain.on("message.receive", async (e, message) => {
+	console.log("message was received", message)
 })
 
 ipcMain.on("selenium.open", async (e, { url }) => {

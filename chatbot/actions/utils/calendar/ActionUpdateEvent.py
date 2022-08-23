@@ -2,7 +2,8 @@ import json
 import aiohttp
 import asyncio
 
-CALENDAR_URL = "http://localhost:4000"
+
+CALENDAR_URL = "http://calendar:4000"
 
 
 async def actionUpdateEvent(humanIndex, events, event):

@@ -6,7 +6,7 @@ import aiohttp
 import asyncio
 from dateutil import parser
 
-CALENDAR_URL = "http://localhost:4000"
+CALENDAR_URL = "http://calendar:4000"
 ZOOM_URL = "http://localhost:8000"
 
 
