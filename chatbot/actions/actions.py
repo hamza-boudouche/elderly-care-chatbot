@@ -31,11 +31,13 @@ from flair.models import SequenceTagger
 from youtubesearchpython.__future__ import VideosSearch
 
 
+# POS-french
+# model_2 = SequenceTagger.load('./pos-french/pytorch_model.bin')
+
 # BlenderBot model
-mname = "./blenderbot-400M-distill"
-model = BlenderbotForConditionalGeneration.from_pretrained(
-    mname, local_files_only=True)
-tokenizer = BlenderbotTokenizer.from_pretrained(mname, local_files_only=True)
+# model = BlenderbotForConditionalGeneration.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
+# tokenizer = BlenderbotTokenizer.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
+
 DOMAIN = "dev--r9nce6d.us.auth0.com"
 
 
@@ -73,16 +75,6 @@ class ActionAuthenticateUser(Action):
                     return [SlotSet("email", data.email)]
         # implement logic to redirect user to authenticate before the first message (dispatch a json message with action = "auth.login.redirect")
         return []
-
-# POS-french
-# model_2 = SequenceTagger.load('./pos-french/pytorch_model.bin')
-
-
-# BlenderBot model
-model = BlenderbotForConditionalGeneration.from_pretrained(
-    "./blenderbot-400M-distill", local_files_only=True)
-tokenizer = BlenderbotTokenizer.from_pretrained(
-    "./blenderbot-400M-distill", local_files_only=True)
 
 
 class ActionEventsToday(Action):

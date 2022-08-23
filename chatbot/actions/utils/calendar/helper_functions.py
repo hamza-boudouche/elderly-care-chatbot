@@ -7,9 +7,9 @@ import json
 
 
 def parseDescription(description: str):
-    if description == "":
+    if description == "" or description is None:
         return {
-            "description": description
+            "description": ""
         }
     lines = description.split("\n")
     if lines[0] == "meeting:":  # means that it contains a meeting

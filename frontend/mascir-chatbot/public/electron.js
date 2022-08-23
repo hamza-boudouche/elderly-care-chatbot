@@ -72,18 +72,18 @@ ipcMain.on("selenium.open", async (e, { url }) => {
 })
 
 ipcMain.on("selenium.close", async (e) => {
-	controls.quit()
+	controls?.quit()
 	controls = undefined
 	youtubeControls = undefined
 })
 
 ipcMain.on("selenium.youtube.search", async (e, { search_query }) => {
-	controls.quit()
+	controls?.quit()
 	await getYoutubeSearchResults(search_query)
 })
 
 ipcMain.on("selenium.youtube.open", async (e, { url }) => {
-	controls.quit()
+	controls?.quit()
 	youtubeControls = await controlYoutubeVideo(url)
 	controls = {
 		quit: youtubeControls.closeVideo

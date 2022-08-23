@@ -31,5 +31,6 @@ const openUrl = async (url) => {
 };
 
 module.exports = {
-	openUrl
+	openUrl,
+	initBrowser
 }
