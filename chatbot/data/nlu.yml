@@ -130,6 +130,25 @@ nlu:
     - ouvrir youtube s il vous plait
     - je veux utiliser youtube
 
+
+- intent: youtube_play
+  examples: |
+    - Demarrer la video
+    - Démarre la video svp
+    - s il vous plait Demarrez la video
+    - Démarrer
+    - Commence la video
+    - Commencez
+
+- intent: youtube_close
+  examples: |
+    - Fermer la video
+    - ferme la video svp
+    - il vous plait fermez la video
+    - Fermez cela
+    - ferme la video
+
+
 - intent: chitchat/ask_mood
   examples: |
     - ça va ?

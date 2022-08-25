@@ -35,8 +35,8 @@ from youtubesearchpython.__future__ import VideosSearch
 # model_2 = SequenceTagger.load('./pos-french/pytorch_model.bin')
 
 # BlenderBot model
-# model = BlenderbotForConditionalGeneration.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
-# tokenizer = BlenderbotTokenizer.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
+model = BlenderbotForConditionalGeneration.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
+tokenizer = BlenderbotTokenizer.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
 
 DOMAIN = "dev--r9nce6d.us.auth0.com"
 
@@ -302,12 +302,15 @@ class ActionWikipedia(Action):
         # search in wikipedia
         results = wikipedia.search(keyword, results=10, suggestion=False)
 
+        # Translate keywword to english
+        keyword = GoogleTranslator(source='en', target='fr').translate(keyword)
+
         if len(results) == 0:
             dispatcher.utter_message(
                 text=f"Désolé, Aucun résultat correspond à votre recherche")
             return [SlotSet('search_query', keyword)]
 
-        wiki = wikipediaapi.Wikipedia('fr')
+        wiki = wikipediaapi.Wikipedia('en')
         exists = False
         for i in range(len(results)):
             page = wiki.page(results[i])
@@ -328,10 +331,12 @@ class ActionWikipedia(Action):
                 for sent in response_list[:2]:
                     response += sent+'.'
                 response = clean(response)
+                response = GoogleTranslator(source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{response}")
             else:
                 response = response_list[0]+'.'
                 response = clean(response)
+                response = GoogleTranslator(source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{response}")
             return [SlotSet("search_query", keyword)]
 
@@ -428,7 +433,7 @@ class ActionOpenYoutube(Action):
             dispatcher.utter_message(text=video_launcher)
         else:
             return [FollowupAction("utter_ask_video_index")]
-        return [SlotSet("index", None)]
+        return [SlotSet("index", None), FollowupAction("utter_video_displayed")]
 
 
 class ActionCloseYoutube(Action):
@@ -459,6 +464,9 @@ class ActionPlayPauseYoutube(Action):
                 "type": "selenium.youtube.playPause"
             }
         }
+        print('#######')
+        print('Play Pause')
+        print('#######')
         dispatcher.utter_message(text=json.dumps(reply))
         return []
 

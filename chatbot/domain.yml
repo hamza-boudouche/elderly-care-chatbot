@@ -13,6 +13,8 @@ intents:
 - wikipedia
 - inform_index
 - youtube_search
+- youtube_play
+- youtube_close
 - chitchat
 
 entities:
@@ -140,8 +142,8 @@ responses:
     - text: Voulez vous des informations supplémentaires à propos de "{search_query}" ?
   utter_ok:
   - text: D'accord
-  utter_position:
-  - text: "voila : {index}"
+  utter_video_displayed:
+  - text: "Le navigateur est maintenant ouvert, vous pouvez regarder votre video."
 
   utter_chitchat/ask_mood:
   - text: Je vais bien, merci ! Comment puis-je vous aider?
@@ -184,6 +186,8 @@ actions:
   - validate_create_form
   - action_search_youtube
   - action_open_youtube
+  - action_play_pause_youtube
+  - action_close_youtube
 
 session_config:
   session_expiration_time: 5
