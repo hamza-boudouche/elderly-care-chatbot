@@ -86,11 +86,12 @@ rules:
   # The actions we want to run when the form is submitted.
   - action: action_search_youtube
   
-- rule: youtube story
+- rule: open youtube rule
   steps:
   - action: utter_ask_video_index
   - intent: inform_index
   - action: action_open_youtube
+
 
 - rule: chitchat
   steps:

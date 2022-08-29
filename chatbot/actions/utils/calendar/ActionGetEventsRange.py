@@ -1,7 +1,7 @@
 from datetime import datetime
 import aiohttp
 import asyncio
-from helper import parseDescription
+from actions.utils.calendar.helper_functions import parseDescription
 
 
 CALENDAR_URL = "http://calendar:4000"

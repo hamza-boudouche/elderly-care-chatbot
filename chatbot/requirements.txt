@@ -1,3 +1,4 @@
+torch==1.10.2
 aiohttp
 aiosignal
 async-timeout
@@ -10,13 +11,12 @@ multidict
 requests
 urllib3
 yarl
-deep-translator
+deep-translator==1.8.3
 wikipedia
 wikipedia-api
 nltk
 xmltodict
 youtube-search-python
 transformers==4.20.1
-torch==1.10.2
 python-dateutil
 flair
