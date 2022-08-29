@@ -69,16 +69,16 @@ io.on("connection", (socket) => {
 (async () => {
 	console.log("testing")
 	creds = await credentials("./credentials.json")
-	// oAuth2Client = await authorize(creds)
-	while (true) {
-		try {
-			oAuth2Client = await authorize(creds)
-			await listEvents(oAuth2Client)
-			break;
-		} catch (error) {
-			await refreshAccessToken()
-		}
-	}
+	oAuth2Client = await authorize(creds)
+	// while (true) {
+	// 	try {
+	// 		oAuth2Client = await authorize(creds)
+	// 		await listEvents(oAuth2Client)
+	// 		break;
+	// 	} catch (error) {
+	// 		await refreshAccessToken()
+	// 	}
+	// }
 })()
 
 app.use(express.json());
@@ -100,8 +100,20 @@ app.get('/range/:minDate?/:maxDate?', async (req, res) => {
 })
 
 app.post('/reminder', async (req, res) => {
-	// TODO: secure this endpoint (by a jtw token generated for the party allowed to send reminders to users (must be coming from a domain name owned by google))
+	// TODO: secure this endpoint (by checking the origin of the request (in the `host` header) --> must be coming from an approved domain name)
+	// the problem in that we can't verify this in our current dev setup (using ngrok as a tunnel overrides the `host` header)
+	// one possible solution might be using ngrok http templates https://ngrok.com/docs/http-header-templates 
+	// in prod env there are 4 possible solutions:
+	// 1- expose the server directly to internet (without any tunnels or load balancers) --> not recommended 
+	// 2- if a tunnel or load balancer is used, configure it to pass the origin host domain name in a custom header that is checked at the application level --> tried this with ngrok but it didn't work, might be a problem with the free plan
+	// 3- if a tunnel or load balancer is used, configure the Access-Control-Allow-Origin header (CORS) in it to accept requests coming only from certain domain names
+	// 4- configure the CORS Access-Control-Allow-Origin at the application level
+	// change the const allowed_host to contain the domain name of servers that are allowed to send http requests (reminders) to this endpoint 
+	const allowed_hosts = ["ngrok.io"]
 	console.log(req.headers)
+	if (allowed_hosts.findIndex(host => host === req.headers.host.split(".").slice(-2).join(".")) === -1) {
+		return res.status(400).send("Unauthorized")
+	}
 	console.log(req.body)
 	const {
 		title,
@@ -138,13 +150,14 @@ app.post('/', async (req, res) => {
 		end,
 		recurrence,
 		attendees,
-		reminders
+		reminders,
 	} = req.body;
 	const data = await addEvent(oAuth2Client, summary, location, description, start, end, recurrence, attendees, reminders)
 	res.json(data)
 })
 
 app.put('/:eventId', async (req, res) => {
+	const email = req.headers["X-mascir-chatbot-email"]
 	const {
 		summary,
 		location,
@@ -160,7 +173,9 @@ app.put('/:eventId', async (req, res) => {
 })
 
 app.delete('/:eventId', async (req, res) => {
-	await deleteEvent(oAuth2Client, req.params.eventId)
+	// await deleteEvent(oAuth2Client, req.params.eventId)
+	const email = req.headers["X-mascir-chatbot-email"]
+	await opptOutOf(oAuth2Client, req.params.eventId, email)
 	res.json({ message: `event ${req.params.eventId} deleted` })
 })
 

@@ -176,6 +176,18 @@ async function updateEvent(auth, id, summary, location, description, start, end,
 	}
 }
 
+async function opptOutOf(auth, id, email) {
+	const calendar = google.calendar({ version: "v3", auth })
+	try {
+		const event = await getEvent(auth, id);
+		if (event.attendees.indexOf()) {
+
+		}
+	} catch (error) {
+		throw new Error(error)
+	}
+}
+
 module.exports = {
 	listEvents,
 	listEventsByAttendee,

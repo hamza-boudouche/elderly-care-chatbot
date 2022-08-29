@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import { useAuth0 } from "@auth0/auth0-react";
 
 const useSend = (callbackMessage) => {
-  const url = 'http://localhost:5005';
+  const url = 'https://cute-ducks-tap-196-200-149-100.loca.lt/';
   const [socket, setSocket] = useState();
   const { user, getAccessTokenSilently, loginWithRedirect } = useAuth0();
   // const user = {
