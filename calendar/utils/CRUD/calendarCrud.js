@@ -23,6 +23,14 @@ function listEvents(auth, min = (new Date()).toISOString(), max = (new Date((new
 	})
 }
 
+async function listEventsByAttendee(auth, email, min = (new Date()).toISOString(), max = (new Date((new Date()).getTime() + 86400000)).toISOString()) {
+	const events = await listEvents(auth, min, max);
+	if (!email) {
+		return events
+	}
+	return events.filter(e => e.attendees.filter(attendee => attendee.email === email).length > 0)
+}
+
 /**
  * 
  * @param {google.auth.OAuth2} auth 
@@ -168,8 +176,21 @@ async function updateEvent(auth, id, summary, location, description, start, end,
 	}
 }
 
+async function opptOutOf(auth, id, email) {
+	const calendar = google.calendar({ version: "v3", auth })
+	try {
+		const event = await getEvent(auth, id);
+		if (event.attendees.indexOf()) {
+
+		}
+	} catch (error) {
+		throw new Error(error)
+	}
+}
+
 module.exports = {
 	listEvents,
+	listEventsByAttendee,
 	deleteEvent,
 	addEvent,
 	updateEvent,

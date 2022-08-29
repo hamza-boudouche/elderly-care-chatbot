@@ -4,7 +4,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 
 const useReminder = (callbackMessage) => {
-	const url = 'http://localhost:4000';
+	// const url = 'https://cute-olives-exist-196-200-149-100.loca.lt/';
+	const url = "http://localhost:4000/"
 	const [socket, setSocket] = useState();
 	const { user, getAccessTokenSilently, loginWithRedirect } = useAuth0();
 
