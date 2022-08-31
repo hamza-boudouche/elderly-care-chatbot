@@ -13,21 +13,21 @@ const initBrowser = async () => {
  * @param {WebDriver} driver 
  * @returns 
  */
-const openUrl = async (url) => {
-	const driver = await initBrowser();
+const openUrl = async (url, driver) => {
+	// const driver = await initBrowser();
 	try {
 		await driver.get(url);
 	} catch (error) {
 		console.log(`error ${error}`);
 	}
 
-	const quit = () => {
-		driver.quit();
-	}
+	// const quit = () => {
+	// 	driver.quit();
+	// }
 
-	return {
-		quit
-	}
+	// return {
+	// 	quit
+	// }
 };
 
 module.exports = {
