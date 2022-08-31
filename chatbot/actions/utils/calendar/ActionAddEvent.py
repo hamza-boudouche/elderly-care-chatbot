@@ -7,7 +7,7 @@ import asyncio
 from dateutil import parser
 
 CALENDAR_URL = "http://calendar:4000"
-ZOOM_URL = "http://localhost:8000"
+ZOOM_URL = "http://videocalls:9000"
 
 
 async def actionAddEvent(summary, description, start, end, withMeeting):
