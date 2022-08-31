@@ -32,11 +32,13 @@ from youtubesearchpython.__future__ import VideosSearch
 
 
 # POS-french
-# model_2 = SequenceTagger.load('./pos-french/pytorch_model.bin')
+model_2 = SequenceTagger.load('./pos-french/pytorch_model.bin')
 
 # BlenderBot model
-model = BlenderbotForConditionalGeneration.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
-tokenizer = BlenderbotTokenizer.from_pretrained("./blenderbot-400M-distill", local_files_only=True)
+model = BlenderbotForConditionalGeneration.from_pretrained(
+    "./blenderbot-400M-distill", local_files_only=True)
+tokenizer = BlenderbotTokenizer.from_pretrained(
+    "./blenderbot-400M-distill", local_files_only=True)
 
 DOMAIN = "dev--r9nce6d.us.auth0.com"
 
@@ -303,7 +305,7 @@ class ActionWikipedia(Action):
         results = wikipedia.search(keyword, results=10, suggestion=False)
 
         # Translate keywword to english
-        keyword = GoogleTranslator(source='en', target='fr').translate(keyword)
+        keyword = GoogleTranslator(source='fr', target='en').translate(keyword)
 
         if len(results) == 0:
             dispatcher.utter_message(
@@ -331,12 +333,14 @@ class ActionWikipedia(Action):
                 for sent in response_list[:2]:
                     response += sent+'.'
                 response = clean(response)
-                response = GoogleTranslator(source='en', target='fr').translate(response)
+                response = GoogleTranslator(
+                    source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{response}")
             else:
                 response = response_list[0]+'.'
                 response = clean(response)
-                response = GoogleTranslator(source='en', target='fr').translate(response)
+                response = GoogleTranslator(
+                    source='en', target='fr').translate(response)
                 dispatcher.utter_message(text=f"{response}")
             return [SlotSet("search_query", keyword)]
 
