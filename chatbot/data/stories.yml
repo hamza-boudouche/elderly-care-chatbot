@@ -35,8 +35,6 @@ stories:
         - intent: youtube_play
         - intent: stop
       - action: action_play_pause_youtube
-      - intent: youtube_close
-      - action: action_close_youtube
 
   # - story: User interrupts the create form and doesn't want to continue
   #   steps:

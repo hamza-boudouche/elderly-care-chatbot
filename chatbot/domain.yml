@@ -61,6 +61,13 @@ slots:
     influence_conversation: false
     mappings:
       - type: custom
+  with_meeting:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: create_form
+          requested_slot: with_meeting
   summary:
     type: text
     mappings:
@@ -100,6 +107,7 @@ slots:
 forms:
   create_form:
     required_slots:
+      - with_meeting
       - summary
       - start
       - end
@@ -124,6 +132,8 @@ responses:
     - text: Je suis un bot, fait par Rasa.
   utter_out_of_scope:
     - text: Désolé, j ai pas compris
+  utter_ask_with_meeting:
+    - text: Est ce qu' il s'agit d'une réunion sur ZOOM ?
   utter_ask_summary:
     - text: Quel est le titre de l'evenement ?
   utter_ask_start:
