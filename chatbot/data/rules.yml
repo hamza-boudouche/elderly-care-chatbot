@@ -92,6 +92,11 @@ rules:
   - intent: inform_index
   - action: action_open_youtube
 
+- rule: close youtube rule
+  steps:
+  - intent: youtube_close
+  - action: action_close_youtube
+
 
 - rule: chitchat
   steps:

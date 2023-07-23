@@ -32,7 +32,7 @@ from youtubesearchpython.__future__ import VideosSearch
 
 
 # POS-french
-model_2 = SequenceTagger.load('./pos-french/pytorch_model.bin')
+# model_2 = SequenceTagger.load('./pos-french/pytorch_model.bin')
 
 # BlenderBot model
 model = BlenderbotForConditionalGeneration.from_pretrained(
@@ -137,13 +137,23 @@ class ActionAddEvent(Action):
     async def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(text=f"Création d'un nouveau evenement ...")
         summary = tracker.get_slot('summary')
         start = tracker.get_slot('start')
         end = tracker.get_slot('end')
         description = tracker.get_slot('description')
-        withMeeting = tracker.get_slot('with_meeting')
+
+        with_meeting = tracker.get_slot('with_meeting')
+        withMeeting = False
+        if with_meeting == 'oui':
+            withMeeting = True
+
         messages, newEvent = await actionAddEvent(summary, description, start, end, withMeeting)
+
+        if withMeeting == False:
+            dispatcher.utter_message(text=f"Création d'un nouveau evenement ...")
+        else:
+            dispatcher.utter_message(text=f"Création d'une nouvelle réunion sur ZOOM...")
+
         for message in messages:
             dispatcher.utter_message(text=message.get("text"))
         return [SlotSet("event", newEvent)]
@@ -453,6 +463,7 @@ class ActionCloseYoutube(Action):
             }
         }
         dispatcher.utter_message(text=json.dumps(reply))
+        print('Close')
         return []
 
 
@@ -468,9 +479,7 @@ class ActionPlayPauseYoutube(Action):
                 "type": "selenium.youtube.playPause"
             }
         }
-        print('#######')
         print('Play Pause')
-        print('#######')
         dispatcher.utter_message(text=json.dumps(reply))
         return []
 
